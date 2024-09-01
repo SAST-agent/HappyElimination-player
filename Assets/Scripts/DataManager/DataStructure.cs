@@ -3,57 +3,6 @@ using System.Collections.Generic;
 
 namespace DataManager
 {
-    public struct Operation
-    {
-        public int Row { get; set; }
-        public int Col { get; set; }
-        public MoveType MoveType { get; set; }
-
-        public Operation(int row, int col, MoveType moveType)
-        {
-            Row = row;
-            Col = col;
-            MoveType = moveType;
-        }
-        
-        public (int, int) Move(MoveType moveType)
-        {
-            switch (moveType)
-            {
-                case MoveType.Up:
-                    return (0, 1);
-                case MoveType.Down:
-                    return (0, -1);
-                case MoveType.Left:
-                    return (-1, 0);
-                case MoveType.Right:
-                    return (1, 0);
-            }
-
-            return (0, 0);
-        }
-    }
-    
-    public struct StateChange
-    {
-        public List<Block> NewBlocks { get; set; }
-        public List<Block> ElimateBlocks { get; set; }
-
-        public StateChange(List<Tuple<int, int, int>> newBlocks, List<Tuple<int, int, int>> eliminateBlocks)
-        {
-            NewBlocks = new List<Block>();
-            ElimateBlocks = new List<Block>();
-            foreach (var block in newBlocks)
-            {
-                NewBlocks.Add(new Block(block));
-            }
-
-            foreach (var block in eliminateBlocks)
-            {
-                ElimateBlocks.Add(new Block(block));
-            }
-        }
-    }
     
     public struct Block
     {
@@ -68,11 +17,44 @@ namespace DataManager
             Type = type;
         }
 
-        public Block(Tuple<int, int, int> tuple)
+        public Block(List<int> list)
         {
-            Row = tuple.Item1;
-            Col = tuple.Item2;
-            Type = (BlockType)tuple.Item3;
+            Row = list[0];
+            Col = list[1];
+            Type = (BlockType)list[2];
+        }
+    }
+    
+    public struct Operation
+    {
+        public Block Block1 { get; set; }
+        public Block Block2 { get; set; }
+
+        public Operation(List<List<int>> list)
+        {
+            Block1 = new Block(list[0]);
+            Block2 = new Block(list[1]);
+        }
+    }
+    
+    public struct StateChange
+    {
+        public List<Block> NewBlocks { get; set; }
+        public List<Block> EliminateBlocks { get; set; }
+
+        public StateChange(List<List<int>> newBlocks, List<List<int>> eliminateBlocks)
+        {
+            NewBlocks = new List<Block>();
+            EliminateBlocks = new List<Block>();
+            foreach (var block in newBlocks)
+            {
+                NewBlocks.Add(new Block(block));
+            }
+
+            foreach (var block in eliminateBlocks)
+            {
+                EliminateBlocks.Add(new Block(block));
+            }
         }
     }
 
@@ -97,22 +79,16 @@ namespace DataManager
             }
         }
 
-        private void _SwapType(Block block1, Block block2)
+        private static void _SwapType(Block block1, Block block2)
         {
             (block1.Type, block2.Type) = (block2.Type, block1.Type);
         }
 
         public int SwapBlock(Operation operation)
         {
-            var (oldRow, oldCol) = (operation.Row, operation.Col);
-            var (dx, dy) = operation.Move(operation.MoveType);
-            var (newRow, newCol) = (oldRow + dx, oldCol + dy);
-            if (!(0 <= oldRow && oldRow < Row && 0 <= oldCol && oldCol < Col
-                && 0 <= newRow && newRow < Row && 0 <= newCol && newCol < Col))
-            {
-                return (int)ReturnType.IndexOutOfRange;
-            }
-            _SwapType(Blocks[oldRow][oldCol], Blocks[oldRow][newCol]);
+            var oldBlock = Blocks[operation.Block1.Row][operation.Block1.Col];
+            var newBlock = Blocks[operation.Block2.Row][operation.Block2.Col];
+            _SwapType(oldBlock, newBlock);
             return (int)ReturnType.Correct;
         }
 
@@ -120,7 +96,7 @@ namespace DataManager
         {
             foreach (var stateChange in stateChanges)
             {
-                var eliminateResult = EliminateSomeBlocks(stateChange.ElimateBlocks);
+                var eliminateResult = EliminateSomeBlocks(stateChange.EliminateBlocks);
                 if (eliminateResult != 0)
                 {
                     return eliminateResult;
