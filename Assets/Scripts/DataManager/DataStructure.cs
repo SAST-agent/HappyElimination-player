@@ -15,6 +15,23 @@ namespace DataManager
             Col = col;
             MoveType = moveType;
         }
+        
+        public (int, int) Move(MoveType moveType)
+        {
+            switch (moveType)
+            {
+                case MoveType.Up:
+                    return (0, 1);
+                case MoveType.Down:
+                    return (0, -1);
+                case MoveType.Left:
+                    return (-1, 0);
+                case MoveType.Right:
+                    return (1, 0);
+            }
+
+            return (0, 0);
+        }
     }
     
     public struct StateChange
@@ -78,6 +95,25 @@ namespace DataManager
                     Blocks[i].Add(new Block(i, j));
                 }
             }
+        }
+
+        private void _SwapType(Block block1, Block block2)
+        {
+            (block1.Type, block2.Type) = (block2.Type, block1.Type);
+        }
+
+        public int SwapBlock(Operation operation)
+        {
+            var (oldRow, oldCol) = (operation.Row, operation.Col);
+            var (dx, dy) = operation.Move(operation.MoveType);
+            var (newRow, newCol) = (oldRow + dx, oldCol + dy);
+            if (!(0 <= oldRow && oldRow < Row && 0 <= oldCol && oldCol < Col
+                && 0 <= newRow && newRow < Row && 0 <= newCol && newCol < Col))
+            {
+                return (int)ReturnType.IndexOutOfRange;
+            }
+            _SwapType(Blocks[oldRow][oldCol], Blocks[oldRow][newCol]);
+            return (int)ReturnType.Correct;
         }
 
         public int UpdateMap(List<StateChange> stateChanges)
