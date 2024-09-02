@@ -3,8 +3,12 @@ using System.Collections.Generic;
 
 namespace DataManager
 {
+    /*
+     * 这里用来存储与游戏相关的数据结构
+     * 例如每一个块、游戏地图
+     */
     
-    public struct Block
+    public class Block
     {
         public int Row { get; set; }
         public int Col { get; set; }
@@ -19,42 +23,13 @@ namespace DataManager
 
         public Block(List<int> list)
         {
+            while (list.Count < 3)
+            {
+                list.Add(-1);
+            }
             Row = list[0];
             Col = list[1];
             Type = (BlockType)list[2];
-        }
-    }
-    
-    public struct Operation
-    {
-        public Block Block1 { get; set; }
-        public Block Block2 { get; set; }
-
-        public Operation(List<List<int>> list)
-        {
-            Block1 = new Block(list[0]);
-            Block2 = new Block(list[1]);
-        }
-    }
-    
-    public struct StateChange
-    {
-        public List<Block> NewBlocks { get; set; }
-        public List<Block> EliminateBlocks { get; set; }
-
-        public StateChange(List<List<int>> newBlocks, List<List<int>> eliminateBlocks)
-        {
-            NewBlocks = new List<Block>();
-            EliminateBlocks = new List<Block>();
-            foreach (var block in newBlocks)
-            {
-                NewBlocks.Add(new Block(block));
-            }
-
-            foreach (var block in eliminateBlocks)
-            {
-                EliminateBlocks.Add(new Block(block));
-            }
         }
     }
 
@@ -63,7 +38,8 @@ namespace DataManager
         public int Row { get; set; }
         public int Col { get; set; }
         public List<List<Block>> Blocks { get; set; }
-
+        
+        // 地图构造函数
         public Map(int row = Constants.ROW, int col = Constants.COL)
         {
             Row = row;
@@ -74,16 +50,18 @@ namespace DataManager
                 Blocks.Add(new List<Block>());
                 for (var j = 0; j < col; j++)
                 {
-                    Blocks[i].Add(new Block(i, j));
+                    Blocks[i].Add(new Block(i, j, BlockType.TypeZero));
                 }
             }
         }
-
+        
+        // 交换两个地块类型的内部函数
         private static void _SwapType(Block block1, Block block2)
         {
             (block1.Type, block2.Type) = (block2.Type, block1.Type);
         }
-
+        
+        // 交换两个地块
         public int SwapBlock(Operation operation)
         {
             var oldBlock = Blocks[operation.Block1.Row][operation.Block1.Col];
@@ -91,7 +69,8 @@ namespace DataManager
             _SwapType(oldBlock, newBlock);
             return (int)ReturnType.Correct;
         }
-
+        
+        // 更新地图
         public int UpdateMap(List<StateChange> stateChanges)
         {
             foreach (var stateChange in stateChanges)
@@ -109,7 +88,8 @@ namespace DataManager
             }
             return 0;
         }
-
+        
+        // 消除一些地块
         private int EliminateSomeBlocks(List<Block> blocks)
         {
             foreach (var block in blocks)
@@ -127,7 +107,8 @@ namespace DataManager
             }
             return (int)ReturnType.Correct;
         }
-
+        
+        // 更新一些地块
         private int UpdateSomeBlocks(List<Block> blocks)
         {
             foreach (var block in blocks)
@@ -137,7 +118,7 @@ namespace DataManager
                     return (int)ReturnType.IndexOutOfRange;
                 }
                 var theBlock = Blocks[block.Row][block.Col];
-                if (theBlock.Type != block.Type)
+                if (theBlock.Type != BlockType.TypeZero)
                 {
                     return (int)ReturnType.InvalidBlockType;
                 }

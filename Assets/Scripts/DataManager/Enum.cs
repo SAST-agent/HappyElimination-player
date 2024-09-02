@@ -1,5 +1,8 @@
 ﻿namespace DataManager
 {
+    /*
+     * 这里用来存储一些枚举类型
+     */
     public enum BlockType
     {
         TypeError = -1,
