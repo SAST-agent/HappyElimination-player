@@ -127,4 +127,20 @@ namespace DataManager
             return (int)ReturnType.Correct;
         }
     }
+
+    public class GameState
+    {
+        public int Round { get; set; }
+        public int Player { get; set; }
+        public int Steps { get; set; }
+        public Map Map { get; set; }
+
+        public GameState()
+        {
+            Round = -1;
+            Player = -1;
+            Steps = -1;
+            Map = new Map();
+        }
+    }
 }
