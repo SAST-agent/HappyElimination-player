@@ -99,6 +99,10 @@ public class GameObjectController : MonoBehaviour
 
     public void UpdateMapObject(StateChange stateChange)
     {
+        for (int j = 0; j < Constants.COL; j++)
+        {
+            top[j] = 0;
+        }
         EliminateObject(stateChange.EliminateBlocks);
         UpdateObject(stateChange.NewBlocks);
     }
@@ -111,6 +115,11 @@ public class GameObjectController : MonoBehaviour
         }
         foreach (var block in list)
         {
+            // modify top to count eliminated blocks
+            if (block.Row == top[block.Col])
+            {
+                top[block.Col] += 1;
+            }
             var tmpObject = objectList[block.Row][block.Col];
             objectList[block.Row][block.Col] = new GameObject();
             Destroy(tmpObject);
@@ -132,11 +141,13 @@ public class GameObjectController : MonoBehaviour
             newObject.transform.parent = GameObject.Find("MapObjects").transform;
             if (tmpObject.CompareTag("Block"))
             {
+                // if the old one is real block
                 newObject.transform.position = tmpObject.transform.position;
             }
             else
             {
-                newObject.transform.position = new Vector3(block.Col * bias + 0.25f, -block.Row * bias - 0.25f, 0) + mapObject.transform.position;
+                // if the old one is an empty gameobject
+                newObject.transform.position = new Vector3(block.Col * bias + 0.25f, (top[block.Col]--) * bias - 0.25f, 0) + mapObject.transform.position;
             }
             objectList[block.Row][block.Col] = newObject;
             Destroy(tmpObject);
