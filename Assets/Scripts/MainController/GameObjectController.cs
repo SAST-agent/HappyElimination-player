@@ -105,6 +105,10 @@ public class GameObjectController : MonoBehaviour
 
     void EliminateObject(List<Block> list)
     {
+        if (list.Count < 3)
+        {
+            return;
+        }
         foreach (var block in list)
         {
             var tmpObject = objectList[block.Row][block.Col];
@@ -115,6 +119,10 @@ public class GameObjectController : MonoBehaviour
 
     void UpdateObject(List<Block> list)
     {
+        if (list.Count < 3)
+        {
+            return;
+        }
         foreach (var block in list)
         {
             var tmpObject = objectList[block.Row][block.Col];

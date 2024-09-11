@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class StateController : MonoBehaviour
 {
-    GameState gameState;
+    GameState gameState = new GameState();
     // Start is called before the first frame update
     void Start()
     {

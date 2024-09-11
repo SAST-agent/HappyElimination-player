@@ -13,6 +13,7 @@ public class ModeController : MonoBehaviour
             var replayController = GetComponent<ReplayController>();
             replayController.ParseReplay("path.json");
             var initialData = replayController.GetInitialData();
+            Debug.Log(initialData);
             GetComponent<StateController>().StateInitialize(initialData);
             GetComponent<MapController>().MapInitialize(initialData);
         }
