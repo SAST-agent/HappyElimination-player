@@ -119,6 +119,7 @@ public class GameObjectController : MonoBehaviour
 
     void UpdateObject(List<Block> list)
     {
+        var mapObject = GameObject.Find("MapObjects");
         if (list.Count < 3)
         {
             return;
@@ -135,7 +136,7 @@ public class GameObjectController : MonoBehaviour
             }
             else
             {
-                newObject.transform.position = new Vector3(block.Col * bias, -block.Row * bias, 0);
+                newObject.transform.position = new Vector3(block.Col * bias + 0.25f, -block.Row * bias - 0.25f, 0) + mapObject.transform.position;
             }
             objectList[block.Row][block.Col] = newObject;
             Destroy(tmpObject);
