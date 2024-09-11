@@ -14,6 +14,7 @@ public class GameObjectController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        objectList = new List<List<GameObject>>();
         top = new int[Constants.COL];
         for (int j = 0; j < Constants.COL; j++)
         {

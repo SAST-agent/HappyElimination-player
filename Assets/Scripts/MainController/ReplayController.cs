@@ -26,7 +26,7 @@ public class ReplayController : MonoBehaviour
 
     public JsonData GetInitialData()
     {
-        return replay.Datas[0];
+        return BackendData.Convert(replay.Datas[0]);
     }
 
     public void PlayRound()
