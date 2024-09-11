@@ -18,7 +18,7 @@ public class JsonParse
             string line = sr.ReadLine();
             while (line != null)
             {
-                datas.Add(JsonConvert.DeserializeObject<JsonData>(line));
+                datas.Add(JsonConvert.DeserializeObject<BackendData>(line));
                 line = sr.ReadLine();
             }
         }
