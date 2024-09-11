@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ReplayController : MonoBehaviour
 {
+    public int nowRound;
     JsonFile replay;
     // Start is called before the first frame update
     void Start()
@@ -27,4 +28,10 @@ public class ReplayController : MonoBehaviour
     {
         return replay.Datas[0];
     }
+
+    public void PlayRound()
+    {
+        // swap and delete and new
+    }
+    // (swap) and (delete and new) in interaction controller
 }
