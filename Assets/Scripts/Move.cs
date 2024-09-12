@@ -27,7 +27,7 @@ public class Move : MonoBehaviour
 
     public void SetMove(Vector3 targetDirection, float moveTotalTime)
     {
-        direction = targetDirection.normalized * bias;
+        direction = targetDirection.normalized * bias / moveTotalTime;
         moveTime = moveTotalTime;
         timer = 0;
     }

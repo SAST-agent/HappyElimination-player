@@ -1,5 +1,4 @@
 using DataManager;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -63,10 +62,14 @@ public class GameObjectController : MonoBehaviour
 
         var motion1 = object1.GetComponent<Move>();
         var collider1 = object1.GetComponent<BoxCollider2D>();
+        var rigid1 = object1.GetComponent<Rigidbody2D>();
         collider1.enabled = false;
+        rigid1.Sleep();
         var motion2 = object2.GetComponent<Move>();
         var collider2 = object2.GetComponent<BoxCollider2D>();
+        var rigid2 = object1.GetComponent<Rigidbody2D>();
         collider2.enabled = false;
+        rigid2.Sleep();
 
         if (row1 == row2 && col1 < col2)
         {
@@ -94,7 +97,9 @@ public class GameObjectController : MonoBehaviour
         }
 
         collider1.enabled = true;
+        rigid1.WakeUp();
         collider2.enabled = true;
+        rigid2.WakeUp();
     }
 
     public void UpdateMapObject(StateChange stateChange)
@@ -104,7 +109,7 @@ public class GameObjectController : MonoBehaviour
             top[j] = 0;
         }
         EliminateObject(stateChange.EliminateBlocks);
-        UpdateObject(stateChange.NewBlocks);
+        Invoke("UpdateObject", 0.8f);
     }
 
     void EliminateObject(List<Block> list)
@@ -126,31 +131,32 @@ public class GameObjectController : MonoBehaviour
         }
     }
 
-    void UpdateObject(List<Block> list)
+    void UpdateObject()
     {
         var mapObject = GameObject.Find("MapObjects");
-        if (list.Count < 3)
+        var map = GetComponent<StateController>().GetMap();
+        for (int i = 0; i < Constants.ROW; i++)
         {
-            return;
-        }
-        foreach (var block in list)
-        {
-            var tmpObject = objectList[block.Row][block.Col];
-            var newObject = Instantiate(prefabs[(int)block.Type]);
-            newObject.name = "Block" + block.Row + "_" + block.Col;
-            newObject.transform.parent = GameObject.Find("MapObjects").transform;
-            if (tmpObject.CompareTag("Block"))
+            for (int j = 0; j < Constants.COL; j++)
             {
-                // if the old one is real block
-                newObject.transform.position = tmpObject.transform.position;
+                Debug.Log(i + " " + j + " " + (int)map.Blocks[i][j].Type);
+                var tmpObject = objectList[i][j];
+                var newObject = Instantiate(prefabs[(int)map.Blocks[i][j].Type]);
+                newObject.name = "Block" + i + "_" + j;
+                newObject.transform.parent = GameObject.Find("MapObjects").transform;
+                if (tmpObject.CompareTag("Block"))
+                {
+                    // if the old one is real block
+                    newObject.transform.position = tmpObject.transform.position;
+                }
+                else
+                {
+                    // if the old one is an empty gameobject
+                    newObject.transform.position = new Vector3(j * bias + 0.25f, (top[j]--) * bias - 0.25f, 0) + mapObject.transform.position;
+                }
+                objectList[i][j] = newObject;
+                Destroy(tmpObject);
             }
-            else
-            {
-                // if the old one is an empty gameobject
-                newObject.transform.position = new Vector3(block.Col * bias + 0.25f, (top[block.Col]--) * bias - 0.25f, 0) + mapObject.transform.position;
-            }
-            objectList[block.Row][block.Col] = newObject;
-            Destroy(tmpObject);
         }
     }
 }

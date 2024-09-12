@@ -138,7 +138,7 @@ namespace DataManager
                     {
                         continue;
                     }
-                    Debug.Log(downs[i][j]);
+                    // Debug.Log(downs[i][j]);
                     if (downs[i][j] + i > Row)
                     {
                         return (int)ReturnType.IndexOutOfRange;
