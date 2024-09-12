@@ -72,27 +72,33 @@ namespace DataManager
             _SwapType(oldBlock, newBlock);
             return (int)ReturnType.Correct;
         }
+
+        public int UpdateMapForOneStep(StateChange stateChange)
+        {
+            var eliminateResult = EliminateSomeBlocks(stateChange.EliminateBlocks);
+            if (eliminateResult != 0)
+            {
+                return eliminateResult;
+            }
+            var changeResult = ChangeLeftBlocksPosition();
+            if (changeResult != 0)
+            {
+                return changeResult;
+            }
+            var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
+            if (updateResult != 0)
+            {
+                return updateResult;
+            }
+            return 0;
+        }
         
         // 更新地图
         public int UpdateMap(List<StateChange> stateChanges)
         {
             foreach (var stateChange in stateChanges)
             {
-                var eliminateResult = EliminateSomeBlocks(stateChange.EliminateBlocks);
-                if (eliminateResult != 0)
-                {
-                    return eliminateResult;
-                }
-                var changeResult = ChangeLeftBlocksPosition();
-                if (changeResult != 0)
-                {
-                    return changeResult;
-                }
-                var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
-                if (updateResult != 0)
-                {
-                    return updateResult;
-                }
+                UpdateMapForOneStep(stateChange);
             }
             return 0;
         }
