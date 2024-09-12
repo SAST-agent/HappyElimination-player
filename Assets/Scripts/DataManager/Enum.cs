@@ -6,12 +6,12 @@
     public enum BlockType
     {
         TypeError = -1,
-        TypeZero = 0,
-        TypeOne = 1,
-        TypeTwo = 2,
-        TypeThree = 3,
-        TypeFour = 4,
-        TypeFive = 5,
+        TypeOne = 0,
+        TypeTwo = 1,
+        TypeThree = 2,
+        TypeFour = 3,
+        TypeFive = 4,
+        TypeZero = 5,
     }
     
     public enum MoveType

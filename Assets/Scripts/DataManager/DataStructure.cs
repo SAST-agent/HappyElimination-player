@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace DataManager
 {
@@ -80,6 +82,11 @@ namespace DataManager
                 {
                     return eliminateResult;
                 }
+                var changeResult = ChangeLeftBlocksPosition();
+                if (changeResult != 0)
+                {
+                    return changeResult;
+                }
                 var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
                 if (updateResult != 0)
                 {
@@ -104,6 +111,44 @@ namespace DataManager
                     return (int)ReturnType.InvalidBlockType;
                 }
                 theBlock.Type = BlockType.TypeZero;
+            }
+            return (int)ReturnType.Correct;
+        }
+
+        private int ChangeLeftBlocksPosition()
+        {
+            var downs = new int[Row][];
+            for (var i = 0; i < Row; i++)
+            {
+                downs[i] = new int[Col];
+                for (var j = 0; j < Col; j++)
+                {
+                    downs[i][j] = 0;
+                }
+            }
+            for (var i = Row - 2; i >= 0; i--)
+            {
+                for (var j = Col - 1; j >= 0; j--)
+                {
+                    downs[i][j] = downs[i + 1][j] + (Blocks[i + 1][j].Type == BlockType.TypeZero ? 1 : 0);
+                }
+            }
+
+            for (var i = Row - 2; i >= 0; i--)
+            {
+                for (var j = Col - 1; j >= 0; j--)
+                {
+                    if (downs[i][j] == 0)
+                    {
+                        continue;
+                    }
+
+                    if (downs[i][j] + i > Row)
+                    {
+                        return (int)ReturnType.IndexOutOfRange;
+                    }
+                    _SwapType(Blocks[i][j], Blocks[i + downs[i][j]][j]);
+                }
             }
             return (int)ReturnType.Correct;
         }
