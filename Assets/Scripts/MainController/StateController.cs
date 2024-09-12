@@ -30,4 +30,21 @@ public class StateController : MonoBehaviour
     {
         return gameState.Map;
     }
+
+    public void changeMap() // 测试用的
+    {
+        Debug.Log(gameState.Map.Blocks[0][0].Type);
+        Debug.Log(gameState.Map.Blocks[1][0].Type);
+        Debug.Log(gameState.Map.Blocks[2][0].Type);
+        Debug.Log(gameState.Map.Blocks[3][0].Type);
+        Debug.Log(gameState.Map.Blocks[4][0].Type);
+        var back_info = JsonParse.ReplayFileParse("init.json").Datas[0];
+        var json = BackendData.Convert(back_info);
+        gameState.Map.UpdateMap(json.StateChanges);
+        Debug.Log(gameState.Map.Blocks[0][0].Type);
+        Debug.Log(gameState.Map.Blocks[1][0].Type);
+        Debug.Log(gameState.Map.Blocks[2][0].Type);
+        Debug.Log(gameState.Map.Blocks[3][0].Type);
+        Debug.Log(gameState.Map.Blocks[4][0].Type);
+    }
 }

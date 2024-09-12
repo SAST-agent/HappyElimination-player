@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace DataManager
 {
@@ -105,12 +106,7 @@ namespace DataManager
                 {
                     return (int)ReturnType.IndexOutOfRange;
                 }
-                var theBlock = Blocks[block.Row][block.Col];
-                if (theBlock.Type != block.Type)
-                {
-                    return (int)ReturnType.InvalidBlockType;
-                }
-                theBlock.Type = BlockType.TypeZero;
+                Blocks[block.Row][block.Col].Type = BlockType.TypeZero;
             }
             return (int)ReturnType.Correct;
         }
@@ -142,7 +138,7 @@ namespace DataManager
                     {
                         continue;
                     }
-
+                    Debug.Log(downs[i][j]);
                     if (downs[i][j] + i > Row)
                     {
                         return (int)ReturnType.IndexOutOfRange;
