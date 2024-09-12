@@ -109,7 +109,7 @@ public class GameObjectController : MonoBehaviour
             top[j] = 0;
         }
         EliminateObject(stateChange.EliminateBlocks);
-        Invoke("UpdateObject", 0.8f);
+        Invoke(nameof(UpdateObject), 0.8f);
     }
 
     void EliminateObject(List<Block> list)
@@ -139,7 +139,7 @@ public class GameObjectController : MonoBehaviour
         {
             for (int j = 0; j < Constants.COL; j++)
             {
-                Debug.Log(i + " " + j + " " + (int)map.Blocks[i][j].Type);
+                // Debug.Log(i + " " + j + " " + (int)map.Blocks[i][j].Type);
                 var tmpObject = objectList[i][j];
                 var newObject = Instantiate(prefabs[(int)map.Blocks[i][j].Type]);
                 newObject.name = "Block" + i + "_" + j;

@@ -41,15 +41,15 @@ public class ReplayController : MonoBehaviour
         // swap and delete and new
         var roundToPlay = BackendData.Convert(replay.Datas[nowRound++]);
         var objectController = GetComponent<GameObjectController>();
-        var stateController = GetComponent<StateController>();
+        // var stateController = GetComponent<StateController>();
 
         objectController.SwapObject(roundToPlay.Operation.Block1.Row, roundToPlay.Operation.Block1.Col, roundToPlay.Operation.Block2.Row, roundToPlay.Operation.Block2.Col);
 
-        stateController.StateInitialize(roundToPlay);
+        // stateController.StateInitialize(roundToPlay);
         nowEliminateStep = 0;
         // eliminateSteps = roundToPlay.StateChanges.Count;
 
-        InvokeRepeating("UpdateMapStep", 0.8f, 2.5f);
+        InvokeRepeating(nameof(UpdateMapStep), 0.8f, 2.5f);
         // TODO: finish round playing
     }
     // (swap) and (delete and new) in interaction controller
@@ -57,11 +57,14 @@ public class ReplayController : MonoBehaviour
     void UpdateMapStep()
     {
         var roundToPlay = BackendData.Convert(replay.Datas[nowRound - 1]);
+        var stateController = GetComponent<StateController>();
         if (nowEliminateStep >= roundToPlay.StateChanges.Count)
         {
             CancelInvoke();
+            stateController.UpdateInformation(roundToPlay);
             return;
         }
+        stateController.MapStateUpdateStep(nowEliminateStep, roundToPlay);
         var objectController = GetComponent<GameObjectController>();
         objectController.UpdateMapObject(roundToPlay.StateChanges[nowEliminateStep++]);
     }

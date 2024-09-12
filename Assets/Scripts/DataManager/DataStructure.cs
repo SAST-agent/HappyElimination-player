@@ -180,6 +180,7 @@ namespace DataManager
         public int Round { get; set; }
         public int Player { get; set; }
         public int Steps { get; set; }
+        public List<int> Scores { get; set; }
         public Map Map { get; set; }
 
         public GameState()
@@ -187,6 +188,7 @@ namespace DataManager
             Round = -1;
             Player = -1;
             Steps = -1;
+            Scores = new List<int>(2);
             Map = new Map();
         }
     }
