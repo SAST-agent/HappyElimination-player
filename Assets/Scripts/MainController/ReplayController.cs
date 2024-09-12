@@ -41,8 +41,9 @@ public class ReplayController : MonoBehaviour
         // swap and delete and new
         var roundToPlay = BackendData.Convert(replay.Datas[nowRound++]);
         var objectController = GetComponent<GameObjectController>();
-        // var stateController = GetComponent<StateController>();
+        var stateController = GetComponent<StateController>();
 
+        stateController.DoOperation(roundToPlay.Operation);
         objectController.SwapObject(roundToPlay.Operation.Block1.Row, roundToPlay.Operation.Block1.Col, roundToPlay.Operation.Block2.Row, roundToPlay.Operation.Block2.Col);
 
         // stateController.StateInitialize(roundToPlay);
@@ -64,7 +65,7 @@ public class ReplayController : MonoBehaviour
             stateController.UpdateInformation(roundToPlay);
             return;
         }
-        stateController.MapStateUpdateStep(nowEliminateStep, roundToPlay);
+        stateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
         var objectController = GetComponent<GameObjectController>();
         objectController.UpdateMapObject(roundToPlay.StateChanges[nowEliminateStep++]);
     }
