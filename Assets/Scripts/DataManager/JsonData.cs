@@ -73,6 +73,7 @@ namespace DataManager
         public int Round { get; set; }
         public int Player { get; set; }
         public int Steps { get; set; }
+        public List<int> Scores { get; set; }
         public Operation Operation { get; set; }
         public List<StateChange> StateChanges { get; set; }
 
@@ -81,6 +82,7 @@ namespace DataManager
             Round = -1;
             Player = -1;
             Steps = -1;
+            Scores = null;
             Operation = null;
             StateChanges = null;
         }
@@ -91,6 +93,7 @@ namespace DataManager
         public int Round { get; set; }
         public int Player { get; set; }
         public int Steps { get; set; }
+        public List<int> Scores { get; set; }
         public List<List<int>> Operation { get; set; }
         public List<List<List<int>>> ManyTimesNewBlocks { get; set; }
         public List<List<List<int>>> ManyTimesEliminateBlocks { get; set; }
@@ -100,17 +103,19 @@ namespace DataManager
             Round = -1;
             Player = -1;
             Steps = -1;
+            Scores = null;
             Operation = null;
             ManyTimesNewBlocks = null;
             ManyTimesEliminateBlocks = null;
         }
 
-        public BackendData(int round, int player, int steps, List<List<int>> operation, List<List<List<int>>> newBlocks,
-            List<List<List<int>>> eliminateBlocks)
+        public BackendData(int round, int player, int steps, List<int> scores, List<List<int>> operation, 
+            List<List<List<int>>> newBlocks, List<List<List<int>>> eliminateBlocks)
         {
             Round = round;
             Player = player;
             Steps = steps;
+            Scores = scores;
             Operation = operation;
             ManyTimesNewBlocks = newBlocks;
             ManyTimesEliminateBlocks = eliminateBlocks;
@@ -123,9 +128,18 @@ namespace DataManager
             {
                 return null;
             }
-            var jsonData = new JsonData{Round = backendData.Round, Player = backendData.Player, Steps = backendData.Steps, Operation = new Operation(backendData.Operation)};
+            var jsonData = new JsonData
+            {
+                Round = backendData.Round, 
+                Player = backendData.Player, 
+                Steps = backendData.Steps, 
+                Scores = backendData.Scores,
+                Operation = new Operation(backendData.Operation)
+            };
             var stateChanges = new List<StateChange>();
-            var manyTimesBlockChanges = backendData.ManyTimesNewBlocks.Zip(backendData.ManyTimesEliminateBlocks, (n, e) => new StateChange(n, e));
+            var manyTimesBlockChanges = backendData.ManyTimesNewBlocks.Zip(
+                    backendData.ManyTimesEliminateBlocks, (n, e) => new StateChange(n, e)
+                );
             stateChanges.AddRange(manyTimesBlockChanges);
             jsonData.StateChanges = stateChanges;
             return jsonData;
