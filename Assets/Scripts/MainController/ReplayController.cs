@@ -65,7 +65,7 @@ public class ReplayController : MonoBehaviour
             stateController.UpdateInformation(roundToPlay);
             return;
         }
-        stateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
+        var downingBlocks = stateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
         var objectController = GetComponent<GameObjectController>();
         objectController.UpdateMapObject(roundToPlay.StateChanges[nowEliminateStep++]);
     }

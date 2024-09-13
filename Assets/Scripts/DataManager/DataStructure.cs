@@ -62,6 +62,9 @@ namespace DataManager
         private static void _SwapType(Block block1, Block block2)
         {
             (block1.Type, block2.Type) = (block2.Type, block1.Type);
+            Debug.Log(block1.Row + " " + block1.Col + " to " + block1.Type);
+            Debug.Log(block2.Row + " " + block2.Col + " to " + block2.Type);
+            
         }
         
         // 交换两个地块
@@ -73,24 +76,24 @@ namespace DataManager
             return (int)ReturnType.Correct;
         }
 
-        public int UpdateMapForOneStep(StateChange stateChange)
+        public List<List<List<int>>> UpdateMapForOneStep(StateChange stateChange)
         {
             var eliminateResult = EliminateSomeBlocks(stateChange.EliminateBlocks);
             if (eliminateResult != 0)
             {
-                return eliminateResult;
+                return null;
             }
             var changeResult = ChangeLeftBlocksPosition();
-            if (changeResult != 0)
+            if (changeResult.Item1 != 0)
             {
-                return changeResult;
+                return null;
             }
             var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
             if (updateResult != 0)
             {
-                return updateResult;
+                return null;
             }
-            return 0;
+            return changeResult.Item2;
         }
         
         // 更新地图
@@ -117,8 +120,9 @@ namespace DataManager
             return (int)ReturnType.Correct;
         }
 
-        private int ChangeLeftBlocksPosition()
+        private (int, List<List<List<int>>>) ChangeLeftBlocksPosition()
         {
+            var downingBlocks = new List<List<List<int>>>();
             var downs = new int[Row][];
             for (var i = 0; i < Row; i++)
             {
@@ -140,19 +144,24 @@ namespace DataManager
             {
                 for (var j = Col - 1; j >= 0; j--)
                 {
-                    if (downs[i][j] == 0)
+                    if (downs[i][j] == 0 || Blocks[i][j].Type == BlockType.TypeZero || Blocks[i][j].Type == BlockType.TypeError)
                     {
                         continue;
                     }
                     // Debug.Log(downs[i][j]);
                     if (downs[i][j] + i > Row)
                     {
-                        return (int)ReturnType.IndexOutOfRange;
+                        return ((int)ReturnType.IndexOutOfRange, null);
                     }
                     _SwapType(Blocks[i][j], Blocks[i + downs[i][j]][j]);
+                    downingBlocks.Add(new List<List<int>>
+                    {
+                        new List<int>{i, j},
+                        new List<int>{i + downs[i][j], j}
+                    });
                 }
             }
-            return (int)ReturnType.Correct;
+            return ((int)ReturnType.Correct, downingBlocks);
         }
         
         // 更新一些地块
@@ -170,6 +179,7 @@ namespace DataManager
                     return (int)ReturnType.InvalidBlockType;
                 }
                 theBlock.Type = block.Type;
+                Debug.Log("The Block (" + theBlock.Row + ", " + theBlock.Col + ") to " + theBlock.Type);
             }
             return (int)ReturnType.Correct;
         }

@@ -27,9 +27,9 @@ public class StateController : MonoBehaviour
         gameState.Map.UpdateMap(initialData.StateChanges);
     }
 
-    public void MapStateUpdateStep(StateChange stateChange)
+    public List<List<List<int>>> MapStateUpdateStep(StateChange stateChange)
     {
-        gameState.Map.UpdateMapForOneStep(stateChange);
+        return gameState.Map.UpdateMapForOneStep(stateChange);
     }
 
     public void DoOperation(Operation operation)
