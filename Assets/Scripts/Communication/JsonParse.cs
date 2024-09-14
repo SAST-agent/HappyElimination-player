@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 public class JsonParse
 {
 
-    public static JsonData BackendInfoParse(string json)
+    public static BackendData BackendInfoParse(string json)
     {
-        return JsonConvert.DeserializeObject<JsonData>(json);
+        return JsonConvert.DeserializeObject<BackendData>(json);
     }
     
     public static JsonFile ReplayFileParse(string filePath)
@@ -18,7 +18,7 @@ public class JsonParse
             string line = sr.ReadLine();
             while (line != null)
             {
-                datas.Add(JsonConvert.DeserializeObject<JsonData>(line));
+                datas.Add(BackendInfoParse(line));
                 line = sr.ReadLine();
             }
         }

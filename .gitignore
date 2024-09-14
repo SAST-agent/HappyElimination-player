@@ -80,3 +80,4 @@ crashlytics-build.properties
 .vscode/
 .fake
 /[Aa]ssets/Data/
+json/
