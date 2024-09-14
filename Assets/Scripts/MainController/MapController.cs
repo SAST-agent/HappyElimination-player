@@ -20,6 +20,6 @@ public class MapController : MonoBehaviour
     public void MapInitialize(JsonData initialData)
     {
         var gameObjectController = GetComponent<GameObjectController>();
-        gameObjectController.UpdateMapObject(initialData.StateChanges[0]);
+        gameObjectController.UpdateMapObject(initialData.StateChanges[0], 1f);
     }
 }

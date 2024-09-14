@@ -62,8 +62,8 @@ namespace DataManager
         private static void _SwapType(Block block1, Block block2)
         {
             (block1.Type, block2.Type) = (block2.Type, block1.Type);
-            Debug.Log(block1.Row + " " + block1.Col + " to " + block1.Type);
-            Debug.Log(block2.Row + " " + block2.Col + " to " + block2.Type);
+            // Debug.Log(block1.Row + " " + block1.Col + " to " + block1.Type);
+            // Debug.Log(block2.Row + " " + block2.Col + " to " + block2.Type);
             
         }
         
@@ -179,7 +179,7 @@ namespace DataManager
                     return (int)ReturnType.InvalidBlockType;
                 }
                 theBlock.Type = block.Type;
-                Debug.Log("The Block (" + theBlock.Row + ", " + theBlock.Col + ") to " + theBlock.Type);
+                // Debug.Log("The Block (" + theBlock.Row + ", " + theBlock.Col + ") to " + theBlock.Type);
             }
             return (int)ReturnType.Correct;
         }

@@ -27,9 +27,23 @@ public class StateController : MonoBehaviour
         gameState.Map.UpdateMap(initialData.StateChanges);
     }
 
+    public void StateUpdate(JsonData roundData)
+    {
+        gameState.Round = roundData.Round;
+        gameState.Player = roundData.Player;
+        gameState.Steps = roundData.Steps;
+        gameState.Scores = roundData.Scores;
+        // gameState.Map.UpdateMapTo(index);
+    }
+
     public List<List<List<int>>> MapStateUpdateStep(StateChange stateChange)
     {
         return gameState.Map.UpdateMapForOneStep(stateChange);
+    }
+
+    public void MapStateUpdate(List<StateChange> stateChanges)
+    {
+        gameState.Map.UpdateMap(stateChanges);
     }
 
     public void DoOperation(Operation operation)
