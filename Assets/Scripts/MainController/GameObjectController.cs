@@ -51,7 +51,7 @@ public class GameObjectController : MonoBehaviour
     }
     */
 
-    public void SwapObject(int row1, int col1, int row2, int col2, float animationSpeed)
+    public void SwapObject(int row1, int col1, int row2, int col2, float animationSpeed = 1.0f)
     {
         var object1 = objectList[row1][col1];
         var object2 = objectList[row2][col2];
@@ -96,7 +96,7 @@ public class GameObjectController : MonoBehaviour
         }
     }
 
-    public void UpdateMapObject(StateChange stateChange, float animationSpeed)
+    public void UpdateMapObject(StateChange stateChange, float animationSpeed = 1.0f)
     {
         // for (int j = 0; j < Constants.COL; j++)
         // {
@@ -128,7 +128,7 @@ public class GameObjectController : MonoBehaviour
     void UpdateObject()
     {
         var mapObject = GameObject.Find("MapObjects");
-        var map = GetComponent<StateController>().GetMap();
+        var map = StateController.GetMap();
         for (int i = 0; i < Constants.ROW; i++)
         {
             for (int j = 0; j < Constants.COL; j++)

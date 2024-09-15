@@ -1,3 +1,4 @@
+using System;
 using DataManager;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,78 +6,73 @@ using UnityEngine;
 
 public class StateController : MonoBehaviour
 {
-    GameState gameState = new GameState();
-    // Start is called before the first frame update
-    void Start()
+    private enum Mode
     {
-        
+        Error = 0,
+        Replay = 1,
+        Interact = 2,
+    }
+    
+    private static Mode _mode = Mode.Error;
+    // 隐藏游戏状态，只对外提供一部分接口
+    private static GameState _gameState = new GameState();
+
+    public static void StateInitialize(JsonData initialData)
+    {
+        _gameState.Round = initialData.Round;
+        _gameState.Player = initialData.Player;
+        _gameState.Steps = initialData.Steps;
+        _gameState.Scores = initialData.Scores;
+        _gameState.Map.UpdateMap(initialData.StateChanges);
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void StateUpdate(JsonData roundData)
     {
-        
+        _gameState.Round = roundData.Round;
+        _gameState.Player = roundData.Player;
+        _gameState.Steps = roundData.Steps;
+        _gameState.Scores = roundData.Scores;
     }
 
-    public void StateInitialize(JsonData initialData)
+    public static List<List<List<int>>> MapStateUpdateStep(StateChange stateChange)
     {
-        gameState.Round = initialData.Round;
-        gameState.Player = initialData.Player;
-        gameState.Steps = initialData.Steps;
-        gameState.Scores = initialData.Scores;
-        gameState.Map.UpdateMap(initialData.StateChanges);
+        return _gameState.Map.UpdateMapForOneStep(stateChange);
     }
 
-    public void StateUpdate(JsonData roundData)
+    public static void MapStateUpdate(List<StateChange> stateChanges)
     {
-        gameState.Round = roundData.Round;
-        gameState.Player = roundData.Player;
-        gameState.Steps = roundData.Steps;
-        gameState.Scores = roundData.Scores;
-        // gameState.Map.UpdateMapTo(index);
+        _gameState.Map.UpdateMap(stateChanges);
     }
 
-    public List<List<List<int>>> MapStateUpdateStep(StateChange stateChange)
+    public static void DoOperation(Operation operation)
     {
-        return gameState.Map.UpdateMapForOneStep(stateChange);
+        _gameState.Map.SwapBlock(operation);
     }
 
-    public void MapStateUpdate(List<StateChange> stateChanges)
+    public static void UpdateInformation(JsonData roundToPlay)
     {
-        gameState.Map.UpdateMap(stateChanges);
+        _gameState.Round = roundToPlay.Round;
+        _gameState.Player = roundToPlay.Player;
+        _gameState.Steps = roundToPlay.Steps;
+        _gameState.Scores = roundToPlay.Scores;
+    }
+    public static Map GetMap()
+    {
+        return _gameState.Map;
     }
 
-    public void DoOperation(Operation operation)
+    public static bool IsReplayMode()
     {
-        gameState.Map.SwapBlock(operation);
+        return _mode == Mode.Replay;
     }
 
-    public void UpdateInformation(JsonData roundToPlay)
+    public static bool IsInteractMode()
     {
-        gameState.Round = roundToPlay.Round;
-        gameState.Player = roundToPlay.Player;
-        gameState.Steps = roundToPlay.Steps;
-        gameState.Scores = roundToPlay.Scores;
-    }
-    public Map GetMap()
-    {
-        return gameState.Map;
+        return _mode == Mode.Interact;
     }
 
-    public void changeMap() // 测试用的
+    public static void SetMode(int mode)
     {
-        Debug.Log(gameState.Map.Blocks[0][0].Type);
-        Debug.Log(gameState.Map.Blocks[1][0].Type);
-        Debug.Log(gameState.Map.Blocks[2][0].Type);
-        Debug.Log(gameState.Map.Blocks[3][0].Type);
-        Debug.Log(gameState.Map.Blocks[4][0].Type);
-        var back_info = JsonParse.ReplayFileParse("init.json").Datas[0];
-        var json = BackendData.Convert(back_info);
-        gameState.Map.UpdateMap(json.StateChanges);
-        Debug.Log(gameState.Map.Blocks[0][0].Type);
-        Debug.Log(gameState.Map.Blocks[1][0].Type);
-        Debug.Log(gameState.Map.Blocks[2][0].Type);
-        Debug.Log(gameState.Map.Blocks[3][0].Type);
-        Debug.Log(gameState.Map.Blocks[4][0].Type);
+        _mode = (Mode)mode;
     }
 }
