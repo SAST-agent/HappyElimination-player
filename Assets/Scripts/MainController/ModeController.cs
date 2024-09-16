@@ -11,7 +11,7 @@ public class ModeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SwitchToReplayMode("path.json");
+        // SwitchToReplayMode("path.json");
     }
 
     // Update is called once per frame

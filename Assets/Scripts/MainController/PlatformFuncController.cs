@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // 与评测机通信需要用的类
@@ -28,19 +30,33 @@ public class PlatformFuncController : MonoBehaviour
         GetComponent<MapController>().MapInitialize(initRoundData);
         StateController.StateInitialize(initRoundData);
     }
-    
-    // 加载下一帧
-    public void LoadNextFrame()
+
+    private void _LoadNextFrame()
     {
         var replayController = gameObject.GetComponent<ReplayController>();
         replayController.PlayRound();
     }
     
-    // 加载指定帧
-    public void LoadFrame(int index)
+    // 加载下一帧
+    public void LoadNextFrame()
+    {
+        var func = new FunctionManager.LoadNextFrameDelegate(_LoadNextFrame);
+        var arg = new FunctionManager.Arg();
+        GetComponent<FunctionManager>().AddMessage(func, arg);
+    }
+
+    private void _LoadFrame(int index)
     {
         var replayController = gameObject.GetComponent<ReplayController>();
         replayController.PlayRoundNumber(index);
+    }
+    
+    // 加载指定帧
+    public void LoadFrame(int index)
+    {
+        var func = new FunctionManager.LoadFrameDelegate(_LoadFrame);
+        var arg = new FunctionManager.Arg(index);
+        GetComponent<FunctionManager>().AddMessage(func, arg);
     }
     
     // 设置动画速度

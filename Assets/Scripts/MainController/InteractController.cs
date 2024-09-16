@@ -21,9 +21,16 @@ public class InteractController: MonoBehaviour
             HandleChange(data);
         }
     }
+
+    private void HandleChange(JsonData data)
+    {
+        var func = new FunctionManager.HandleChangeDelegate(_HandleChange);
+        var arg = new FunctionManager.Arg(data);
+        GetComponent<FunctionManager>().AddMessage(func, arg);
+    }
     
     // 处理每一回合的操作
-    private void HandleChange(JsonData data)
+    private void _HandleChange(JsonData data)
     {
         var operation = data.Operation;
         StateController.DoOperation(operation);
