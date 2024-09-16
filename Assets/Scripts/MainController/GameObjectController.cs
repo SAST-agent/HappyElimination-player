@@ -70,30 +70,10 @@ public class GameObjectController : MonoBehaviour
 
         float adjustSwapTime = swapTime / animationSpeed;
 
-        if (row1 == row2 && col1 < col2)
-        {
-            motion1.SetMove(Vector3.right, adjustSwapTime);
-            motion2.SetMove(Vector3.left, adjustSwapTime);
-        }
-        else if (row1 == row2 && col1 > col2)
-        {
-            motion1.SetMove(Vector3.left, adjustSwapTime);
-            motion2.SetMove(Vector3.right, adjustSwapTime);
-        }
-        else if (col1 == col2 && row1 < row2)
-        {
-            motion1.SetMove(Vector3.down, adjustSwapTime);
-            motion2.SetMove(Vector3.up, adjustSwapTime);
-        }
-        else if (col1 == col2 && row1 > row2)
-        {
-            motion1.SetMove(Vector3.up, adjustSwapTime);
-            motion2.SetMove(Vector3.down, adjustSwapTime);
-        }
-        else
-        {
-            Debug.Log("illegal swap");
-        }
+        Vector3 direction = (object1.transform.position - object2.transform.position).normalized;
+
+        motion2.SetMove(direction, adjustSwapTime);
+        motion1.SetMove(-direction, adjustSwapTime);
     }
 
     public void UpdateMapObject(StateChange stateChange, float animationSpeed = 1.0f)
