@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BlockController : MonoBehaviour
 {
-    public float bias;
+    // public float bias;
     public Vector3 direction;
     float moveTime;
     float timer;
@@ -30,7 +30,7 @@ public class BlockController : MonoBehaviour
 
     public void SetMove(Vector3 targetDirection, float moveTotalTime)
     {
-        direction = targetDirection.normalized * bias / moveTotalTime;
+        direction = targetDirection / moveTotalTime;
         moveTime = moveTotalTime;
         timer = 0;
     }

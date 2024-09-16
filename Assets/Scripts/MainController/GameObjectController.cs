@@ -70,7 +70,7 @@ public class GameObjectController : MonoBehaviour
 
         float adjustSwapTime = swapTime / animationSpeed;
 
-        Vector3 direction = (object1.transform.position - object2.transform.position).normalized;
+        Vector3 direction = (object1.transform.position - object2.transform.position);
 
         motion2.SetMove(direction, adjustSwapTime);
         motion1.SetMove(-direction, adjustSwapTime);
