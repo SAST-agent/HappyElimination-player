@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class BlockController : MonoBehaviour
 {
-    // public float bias;
+    public float bias;
     public Vector3 direction;
     float moveTime;
     float timer;
 
     public int row;
     public int col;
+
+    GameObject mapObject;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        mapObject = GameObject.Find("MapObjects");
     }
 
     // Update is called once per frame
@@ -25,6 +27,10 @@ public class BlockController : MonoBehaviour
         {
             transform.position += direction * Time.deltaTime;
             timer += Time.deltaTime;
+        }
+        else
+        {
+            transform.position = new Vector3(col * bias + 0.25f, -row * bias - 0.25f, 0) + mapObject.transform.position;
         }
     }
 
