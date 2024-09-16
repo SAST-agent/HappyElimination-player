@@ -132,7 +132,7 @@ public class GameObjectController : MonoBehaviour
         for (int i = 0; i < Constants.ROW; i++)
         {
             for (int j = 0; j < Constants.COL; j++)
-            {
+            { 
                 // Debug.Log(i + " " + j + " " + (int)map.Blocks[i][j].Type);
                 var tmpObject = objectList[i][j];
                 var newObject = Instantiate(prefabs[(int)map.Blocks[i][j].Type]);
@@ -158,5 +158,22 @@ public class GameObjectController : MonoBehaviour
                 Destroy(tmpObject);
             }
         }
+    }
+
+    public void ClearBlocks()
+    {
+        var map = StateController.GetMap();
+        for (var i = 0; i < map.Row; i++)
+        {
+            for (var j = 0; j < map.Col; j++)
+            {
+                Destroy(objectList[i][j]);
+            }
+        }
+    }
+
+    public void GenerateObjByState()
+    {
+        UpdateObject();
     }
 }

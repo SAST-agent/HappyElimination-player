@@ -23,6 +23,7 @@ public class StateController : MonoBehaviour
         _gameState.Player = initialData.Player;
         _gameState.Steps = initialData.Steps;
         _gameState.Scores = initialData.Scores;
+        _gameState.Map.ClearBlocks();
         _gameState.Map.UpdateMap(initialData.StateChanges);
     }
 

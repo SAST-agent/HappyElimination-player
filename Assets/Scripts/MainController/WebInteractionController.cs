@@ -159,7 +159,7 @@ public class WebInteractionController : MonoBehaviour
                     SendFrameCountToFrontend(frameCount - 1);
                     break;
                 case FrontendData.MsgType.load_frame:
-                    Debug.Log(msg.index + 1);
+                    Debug.Log($"Load for the frame {msg.index + 1}");
                     GetComponent<PlatformFuncController>().LoadFrame(msg.index + 1);
                     break;
                 case FrontendData.MsgType.load_next_frame:

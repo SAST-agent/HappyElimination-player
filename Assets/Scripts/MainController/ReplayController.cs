@@ -2,6 +2,7 @@ using System;
 using DataManager;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ReplayController : MonoBehaviour
@@ -49,29 +50,34 @@ public class ReplayController : MonoBehaviour
         {
             return null;
         }
+        var data = replay.Datas[0];
         return BackendData.Convert(replay.Datas[0]);
     }
 
     public void PlayRoundNumber(int index)
     {
-        var initialData = GetInitialData();
-        // Debug.Log(initialData);
+        Debug.Log($"Load the round {index}");
         if (index >= replay.Datas.Count)
         {
-            Debug.Log("frame index out of range");
+            Debug.Log($"frame index {index} out of range");
             return;
         }
+        var initialData = GetInitialData();
+        /*for (int i = 0; i < initialData.StateChanges[0].NewBlocks.Count; i++)
+        {
+            var block = initialData.StateChanges[0].NewBlocks[i];
+            Debug.Log($"{block.Row}, {block.Col}: {block.Type}");
+        }*/
         StateController.StateInitialize(initialData);
         // update map
-        for (int i = 1; i <= index; i++)
+        for (int i = 1; i < index; i++)
         {
             var data = BackendData.Convert(replay.Datas[i]);
             StateController.DoOperation(data.Operation);
             StateController.MapStateUpdate(data.StateChanges);
         }
-        StateController.StateUpdate(BackendData.Convert(replay.Datas[index]));
-
-        GetComponent<MapController>().MapInitialize(initialData);
+        GetComponent<MapController>().ReGenerateMap();
+        nowRound = index;
     }
 
     public void PlayRound()
@@ -86,7 +92,7 @@ public class ReplayController : MonoBehaviour
         var roundToPlay = BackendData.Convert(replay.Datas[nowRound++]);
 
         StateController.DoOperation(roundToPlay.Operation);
-        GetComponent<GameObjectController>().SwapObject(roundToPlay.Operation.Block1.Row, roundToPlay.Operation.Block1.Col, roundToPlay.Operation.Block2.Row, roundToPlay.Operation.Block2.Col, animationSpeed);
+        GetComponent<MapController>().DoOperationOnMap(roundToPlay.Operation, animationSpeed);
 
         // stateController.StateInitialize(roundToPlay);
         nowEliminateStep = 0;
@@ -107,9 +113,9 @@ public class ReplayController : MonoBehaviour
             playing = false;
             return;
         }
-        var downingBlocks = StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
-        var objectController = GetComponent<GameObjectController>();
-        objectController.UpdateMapObject(roundToPlay.StateChanges[nowEliminateStep++], animationSpeed);
+        StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
+        GetComponent<MapController>().UpdateMap(roundToPlay.StateChanges[nowEliminateStep], animationSpeed);
+        nowEliminateStep += 1;
         Invoke(nameof(UpdateMapStep), 1f / animationSpeed);
     }
 }

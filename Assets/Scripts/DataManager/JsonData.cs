@@ -63,12 +63,17 @@ namespace DataManager
             EliminateBlocks = new List<Block>();
             foreach (var block in newBlocks)
             {
-                NewBlocks.Add(new Block(block));
+                if (block != null && block.Count >= 3)
+                {
+                    NewBlocks.Add(new Block(block));
+                }
             }
-
             foreach (var block in eliminateBlocks)
             {
-                EliminateBlocks.Add(new Block(block));
+                if (block != null && block.Count >= 2)
+                {
+                    EliminateBlocks.Add(new Block(block));
+                }
             }
         }
     }
