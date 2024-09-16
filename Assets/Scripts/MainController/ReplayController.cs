@@ -13,7 +13,7 @@ public class ReplayController : MonoBehaviour
     public int nowEliminateStep;
     // public int eliminateSteps;
     JsonFile replay;
-    bool playing;
+    public bool playing;
 
     public float animationSpeed;
     

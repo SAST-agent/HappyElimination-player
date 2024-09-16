@@ -41,22 +41,14 @@ public class PlatformFuncController : MonoBehaviour
     public void LoadNextFrame()
     {
         var func = new FunctionManager.LoadNextFrameDelegate(_LoadNextFrame);
-        var arg = new FunctionManager.Arg();
-        GetComponent<FunctionManager>().AddMessage(func, arg);
-    }
-
-    private void _LoadFrame(int index)
-    {
-        var replayController = gameObject.GetComponent<ReplayController>();
-        replayController.PlayRoundNumber(index);
+        GetComponent<FunctionManager>().AddMessage(func, null);
     }
     
     // 加载指定帧
     public void LoadFrame(int index)
     {
-        var func = new FunctionManager.LoadFrameDelegate(_LoadFrame);
-        var arg = new FunctionManager.Arg(index);
-        GetComponent<FunctionManager>().AddMessage(func, arg);
+        GetComponent<FunctionManager>().ClearQueue();
+        GetComponent<ReplayController>().PlayRoundNumber(index);
     }
     
     // 设置动画速度

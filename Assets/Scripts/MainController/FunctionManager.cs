@@ -3,47 +3,36 @@ using System.Collections.Generic;
 using DataManager;
 using UnityEngine;
 
+#nullable enable
 public class FunctionManager: MonoBehaviour
 {
-    public delegate void LoadFrameDelegate(int index);
     public delegate void LoadNextFrameDelegate();
     public delegate void HandleChangeDelegate(JsonData data);
-
-    public class Arg
-    {
-        public int Index = -1;
-        public JsonData Data = new JsonData();
-
-        public Arg(){}
-        
-        public Arg(JsonData data)
-        {
-            Index = -1;
-            Data = data;
-        }
-
-        public Arg(int index)
-        {
-            Index = index;
-            Data = new JsonData();
-        }
-        
-    }
     
-    private static Queue<Tuple<Delegate, Arg>> _functionQueue;
+    private static Queue<Tuple<Delegate, JsonData?>> _functionQueue;
+    public ReplayController replayController;
 
     private void Start()
     {
-        _functionQueue = new Queue<Tuple<Delegate, Arg>>();
+        _functionQueue = new Queue<Tuple<Delegate, JsonData?>>();
+        replayController = GetComponent<ReplayController>();
     }
 
-    public void AddMessage(Delegate function, Arg arg)
+    private void Update()
+    {
+        if (!replayController.playing && _functionQueue.Count > 0)
+        {
+            HandleMessage();
+        }
+    }
+
+    public void AddMessage(Delegate function, JsonData? arg)
     {
         if (_functionQueue == null)
         {
-            _functionQueue = new Queue<Tuple<Delegate, Arg>>();
+            _functionQueue = new Queue<Tuple<Delegate, JsonData?>>();
         }
-        _functionQueue.Enqueue(new Tuple<Delegate, Arg>(function, arg));
+        _functionQueue.Enqueue(new Tuple<Delegate, JsonData?>(function, arg));
         Debug.Log("AddMessage");
         Debug.Log($"aaa{_functionQueue.Count}");
     }
@@ -58,17 +47,23 @@ public class FunctionManager: MonoBehaviour
         var tuple = _functionQueue.Dequeue();
         var func = tuple.Item1;
         var arg = tuple.Item2;
-        if (arg.Index > 0)
+        if (func == null)
         {
-            func.DynamicInvoke(arg.Index);
+            return;
         }
-        else if (arg.Data.Round > 0)
-        {
-            func.DynamicInvoke(arg.Data);
-        }
-        else
+
+        if (arg == null)
         {
             func.DynamicInvoke();
         }
+        else
+        {
+            func.DynamicInvoke(arg);
+        }
+    }
+
+    public void ClearQueue()
+    {
+        _functionQueue.Clear();
     }
 }

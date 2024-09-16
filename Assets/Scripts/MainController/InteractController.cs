@@ -25,8 +25,7 @@ public class InteractController: MonoBehaviour
     private void HandleChange(JsonData data)
     {
         var func = new FunctionManager.HandleChangeDelegate(_HandleChange);
-        var arg = new FunctionManager.Arg(data);
-        GetComponent<FunctionManager>().AddMessage(func, arg);
+        GetComponent<FunctionManager>().AddMessage(func, data);
     }
     
     // 处理每一回合的操作
