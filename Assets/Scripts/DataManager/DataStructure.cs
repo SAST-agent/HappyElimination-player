@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace DataManager
 {
@@ -55,6 +58,18 @@ namespace DataManager
             }
         }
         
+        // 清空一个地图中的块
+        public void ClearBlocks()
+        {
+            foreach (var row in Blocks)
+            {
+                foreach (var block in row)
+                {
+                    block.Type = BlockType.TypeZero;
+                }
+            }
+        }
+        
         // 交换两个地块类型的内部函数
         private static void _SwapType(Block block1, Block block2)
         {
@@ -69,22 +84,34 @@ namespace DataManager
             _SwapType(oldBlock, newBlock);
             return (int)ReturnType.Correct;
         }
+
+        public List<List<List<int>>> UpdateMapForOneStep(StateChange stateChange)
+        {
+            var eliminateResult = EliminateSomeBlocks(stateChange.EliminateBlocks);
+            if (eliminateResult != 0)
+            {
+                return null;
+            }
+            var changeResult = ChangeLeftBlocksPosition();
+            if (changeResult.Item1 != 0)
+            {
+                return null;
+            }
+            var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
+            if (updateResult != 0)
+            {
+                Debug.Log(updateResult);
+                return null;
+            }
+            return changeResult.Item2;
+        }
         
         // 更新地图
         public int UpdateMap(List<StateChange> stateChanges)
         {
             foreach (var stateChange in stateChanges)
             {
-                var eliminateResult = EliminateSomeBlocks(stateChange.EliminateBlocks);
-                if (eliminateResult != 0)
-                {
-                    return eliminateResult;
-                }
-                var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
-                if (updateResult != 0)
-                {
-                    return updateResult;
-                }
+                UpdateMapForOneStep(stateChange);
             }
             return 0;
         }
@@ -98,14 +125,53 @@ namespace DataManager
                 {
                     return (int)ReturnType.IndexOutOfRange;
                 }
-                var theBlock = Blocks[block.Row][block.Col];
-                if (theBlock.Type != block.Type)
-                {
-                    return (int)ReturnType.InvalidBlockType;
-                }
-                theBlock.Type = BlockType.TypeZero;
+                Blocks[block.Row][block.Col].Type = BlockType.TypeZero;
             }
             return (int)ReturnType.Correct;
+        }
+
+        private (int, List<List<List<int>>>) ChangeLeftBlocksPosition()
+        {
+            var downingBlocks = new List<List<List<int>>>();
+            var downs = new int[Row][];
+            for (var i = 0; i < Row; i++)
+            {
+                downs[i] = new int[Col];
+                for (var j = 0; j < Col; j++)
+                {
+                    downs[i][j] = 0;
+                }
+            }
+            for (var i = Row - 2; i >= 0; i--)
+            {
+                for (var j = Col - 1; j >= 0; j--)
+                {
+                    downs[i][j] = downs[i + 1][j] + (Blocks[i + 1][j].Type == BlockType.TypeZero ? 1 : 0);
+                }
+            }
+
+            for (var i = Row - 2; i >= 0; i--)
+            {
+                for (var j = Col - 1; j >= 0; j--)
+                {
+                    if (downs[i][j] == 0 || Blocks[i][j].Type == BlockType.TypeZero || Blocks[i][j].Type == BlockType.TypeError)
+                    {
+                        continue;
+                    }
+                    // Debug.Log(downs[i][j]);
+                    if (downs[i][j] + i > Row)
+                    {
+                        return ((int)ReturnType.IndexOutOfRange, null);
+                    }
+                    _SwapType(Blocks[i][j], Blocks[i + downs[i][j]][j]);
+                    downingBlocks.Add(new List<List<int>>
+                    {
+                        new List<int>{i, j},
+                        new List<int>{i + downs[i][j], j}
+                    });
+                }
+            }
+            return ((int)ReturnType.Correct, downingBlocks);
         }
         
         // 更新一些地块
@@ -125,6 +191,24 @@ namespace DataManager
                 theBlock.Type = block.Type;
             }
             return (int)ReturnType.Correct;
+        }
+    }
+
+    public class GameState
+    {
+        public int Round { get; set; }
+        public int Player { get; set; }
+        public int Steps { get; set; }
+        public List<int> Scores { get; set; }
+        public Map Map { get; set; }
+
+        public GameState()
+        {
+            Round = -1;
+            Player = -1;
+            Steps = -1;
+            Scores = new List<int>(2);
+            Map = new Map();
         }
     }
 }

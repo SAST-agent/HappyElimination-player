@@ -138,6 +138,9 @@ GameObject:
   - component: {fileID: 169101991}
   - component: {fileID: 169101990}
   - component: {fileID: 169101996}
+  - component: {fileID: 169101998}
+  - component: {fileID: 169101997}
+  - component: {fileID: 169101999}
   m_Layer: 0
   m_Name: Main Controller
   m_TagString: Untagged
@@ -205,6 +208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isReplayMode: 1
+  isInteractMode: 0
 --- !u!114 &169101994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +246,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38493e45693e7ed4988d8863b8ab39e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &169101997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169101989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a37f3715c4845b1bf1a71d9fa840f06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &169101998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169101989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5137bfd50fa4d579b1bbaf1fcde5136, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tokenB64: 
+--- !u!114 &169101999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169101989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa785f36146d4f3996f8cb07d8af1b02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &424179156
@@ -595,9 +636,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 169101992}
-        m_TargetAssemblyTypeName: ReplayController, Assembly-CSharp
-        m_MethodName: PlayRound
+      - m_Target: {fileID: 169101996}
+        m_TargetAssemblyTypeName: PlatformFuncController, Assembly-CSharp
+        m_MethodName: LoadNextFrame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
