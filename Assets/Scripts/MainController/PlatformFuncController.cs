@@ -41,7 +41,7 @@ public class PlatformFuncController : MonoBehaviour
     public void LoadNextFrame()
     {
         var func = new FunctionManager.LoadNextFrameDelegate(_LoadNextFrame);
-        GetComponent<FunctionManager>().AddMessage(func, null);
+        GetComponent<FunctionManager>().AddMessageToQueue(func, null);
     }
     
     // 加载指定帧

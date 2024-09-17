@@ -13,7 +13,7 @@ public class ReplayController : MonoBehaviour
     public int nowEliminateStep;
     // public int eliminateSteps;
     JsonFile replay;
-    public bool playing;
+    public static bool playing;
 
     public float animationSpeed;
     
@@ -84,9 +84,14 @@ public class ReplayController : MonoBehaviour
 
     public void PlayRound()
     {
-        if (nowRound >= replay.Datas.Count || playing)
+        if (nowRound >= replay.Datas.Count)
         {
-            Debug.Log("there is a round playing or now round index is out of range");
+            Debug.Log("now round index is out of range");
+            return;
+        }
+        if (playing)
+        {
+            Debug.Log("there is a playing round");
             return;
         }
         playing = true;
@@ -107,6 +112,7 @@ public class ReplayController : MonoBehaviour
 
     void UpdateMapStep()
     {
+        Debug.Log($"Eliminate step {nowEliminateStep}");
         var roundToPlay = BackendData.Convert(replay.Datas[nowRound - 1]);
         if (nowEliminateStep >= roundToPlay.StateChanges.Count)
         {

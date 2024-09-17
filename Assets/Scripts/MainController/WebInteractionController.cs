@@ -163,6 +163,7 @@ public class WebInteractionController : MonoBehaviour
                     GetComponent<PlatformFuncController>().LoadFrame(msg.index + 1);
                     break;
                 case FrontendData.MsgType.load_next_frame:
+                    Debug.Log("Load next frame");
                     GetComponent<PlatformFuncController>().LoadNextFrame();
                     break;
                 case FrontendData.MsgType.load_players:
@@ -188,7 +189,6 @@ public class WebInteractionController : MonoBehaviour
         Debug.Log("into send");
         string information = JsonConvert.SerializeObject(reply);
         Debug.Log(information);
-        Debug.Log("finish serialize");
         Send_frontend(information);
     }
     
