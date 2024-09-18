@@ -16,7 +16,7 @@ public class ModeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // SwitchToReplayMode("path.json");
+        SwitchToReplayMode("path.json");
     }
 
     // Update is called once per frame
@@ -32,13 +32,13 @@ public class ModeController : MonoBehaviour
         var replayController = GetComponent<ReplayController>();
         replayController.ParseReplay(path);
         // 下面这一段代码是本地测试回放用的，部署的时候请注释掉
-        /* var initialData = replayController.GetInitialData();
+        var initialData = replayController.GetInitialData();
         if (initialData == null)
         {
             return;
         }
         StateController.StateInitialize(initialData);
-        GetComponent<MapController>().MapInitialize(initialData);*/
+        GetComponent<MapController>().MapInitialize(initialData);
     }
 
     public void SwitchToInteractionMode()

@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.75, y: 4.25, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.99999994}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -192,7 +192,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.82, y: 0.82}
+  m_Size: {x: 5.12, y: 5.12}
   m_EdgeRadius: 0
 --- !u!120 &-7431639595429961626
 LineRenderer:
@@ -215,7 +215,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 749b9069dc4742c5bfa5c74644049926, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -237,8 +237,10 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0.05, y: 0.05, z: 0}
+  - {x: -0.05, y: 0.05, z: 0}
+  - {x: -0.05, y: -0.05, z: 0}
+  - {x: 0.05, y: -0.05, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -247,7 +249,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.9764706
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -296,5 +298,5 @@ LineRenderer:
     generateLightingData: 0
   m_MaskInteraction: 0
   m_UseWorldSpace: 1
-  m_Loop: 0
+  m_Loop: 1
   m_ApplyActiveColorSpace: 1
