@@ -6,7 +6,7 @@ public class InteractController: MonoBehaviour
     // 将后端传递过来的信息显示在游戏上
     public void Interact(JsonData data)
     {
-        if (!StateController.IsInteractMode())
+        if (!ModeController.IsInteractMode())
         {
             return;
         }

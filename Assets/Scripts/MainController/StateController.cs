@@ -6,14 +6,6 @@ using UnityEngine;
 
 public class StateController : MonoBehaviour
 {
-    private enum Mode
-    {
-        Error = 0,
-        Replay = 1,
-        Interact = 2,
-    }
-    
-    private static Mode _mode = Mode.Error;
     // 隐藏游戏状态，只对外提供一部分接口
     private static GameState _gameState = new GameState();
 
@@ -60,20 +52,5 @@ public class StateController : MonoBehaviour
     public static Map GetMap()
     {
         return _gameState.Map;
-    }
-
-    public static bool IsReplayMode()
-    {
-        return _mode == Mode.Replay;
-    }
-
-    public static bool IsInteractMode()
-    {
-        return _mode == Mode.Interact;
-    }
-
-    public static void SetMode(int mode)
-    {
-        _mode = (Mode)mode;
     }
 }

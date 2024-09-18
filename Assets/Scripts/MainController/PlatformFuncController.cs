@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataManager;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,17 +11,14 @@ public class PlatformFuncController : MonoBehaviour
     // 设置为交互模式
     public void SwitchToInteractionMode()
     {
-        var modeController = GetComponent<ModeController>();
-        modeController.isReplayMode = false;
-        modeController.SwitchToInteractionMode();
+        Debug.Log("Switch to Interaction Mode");
+        GetComponent<ModeController>().SwitchToInteractionMode();
     }
     
     // 设置为回放模式
     public void SwitchToReplayMode(string path)
     {
-        var modeController = GetComponent<ModeController>();
-        modeController.isReplayMode = true;
-        modeController.SwitchToReplayMode(path);
+        GetComponent<ModeController>().SwitchToReplayMode(path);
     }
 
     // 回放解析完成，开始初始化地图

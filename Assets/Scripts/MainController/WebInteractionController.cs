@@ -10,7 +10,7 @@ using UnityEngine;
 public class WebInteractionController : MonoBehaviour
 {
     public string tokenB64;
-    private bool _loaded = false;
+    private static bool _loaded = false;
 
     public void Update()
     {
@@ -30,6 +30,7 @@ public class WebInteractionController : MonoBehaviour
     {
         if (Connect(token))
         {
+            Debug.Log("Connected to Judger");
             ReplyConnectionSucceed(token);
         }
     }
@@ -154,7 +155,10 @@ public class WebInteractionController : MonoBehaviour
                     GetComponent<PlatformFuncController>().SwitchToReplayMode(null);
                     int frameCount = Convert.ToInt32(msg.payload);
                     for (int i = 0; i < frameCount; i++)
+                    {
+                        Debug.Log($"Get operation frame {i}");
                         Getoperation(i);
+                    }
                     GetComponent<PlatformFuncController>().ReplayPlayerInited();
                     SendFrameCountToFrontend(frameCount - 1);
                     break;
@@ -219,6 +223,7 @@ public class WebInteractionController : MonoBehaviour
 
     private void SendInitCompleteToFrontend()
     {
+        Debug.Log("aaa");
         // 告知前端网页unity已经初始化完成，接收队列中的信息
         SendToFrontend(new FrontendReplyData
             {
