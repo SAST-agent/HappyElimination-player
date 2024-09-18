@@ -28,6 +28,7 @@ public class BlockController : MonoBehaviour
             Debug.Log("Block Button is null");
         }
         lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.enabled = false;
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -72,12 +73,11 @@ public class BlockController : MonoBehaviour
         if (GameObject.Find("Main Controller").GetComponent<ClickController>().SetChosenBlock(row, col))
         {
             lineRenderer.enabled = true;
-            // 改变颜色为红色，完全不透明
             spriteRenderer.color = new Color(0.5f, 0.5f, 0.5f, 1); // RGBA
         }
         else
         {
-            lineRenderer.enabled = true;
+            lineRenderer.enabled = false;
             // 改变颜色为红色，完全不透明
             spriteRenderer.color = new Color(1, 1, 1, 1); // RGBA
         }
