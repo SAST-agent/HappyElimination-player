@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BlockController : MonoBehaviour
 {
+    public Button blockButton;
     public float bias;
     public Vector3 direction;
     float moveTime;
@@ -18,6 +20,10 @@ public class BlockController : MonoBehaviour
     void Start()
     {
         mapObject = GameObject.Find("MapObjects");
+        if (blockButton != null)
+        {
+            Debug.Log("get button");
+        }
     }
 
     // Update is called once per frame
@@ -49,5 +55,11 @@ public class BlockController : MonoBehaviour
     public List<int> GetPosition()
     {
         return new List<int> { row, col };
+    }
+    
+    private void OnMouseDown()
+    {
+        Debug.Log( row + "," + col );
+        GameObject.Find("Main Controller").GetComponent<ClickController>().SetChosenBlock(row, col);
     }
 }
