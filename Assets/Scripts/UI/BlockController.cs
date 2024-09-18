@@ -20,9 +20,9 @@ public class BlockController : MonoBehaviour
     void Start()
     {
         mapObject = GameObject.Find("MapObjects");
-        if (blockButton != null)
+        if (blockButton == null)
         {
-            Debug.Log("get button");
+            Debug.Log("Block Button is null");
         }
     }
 
