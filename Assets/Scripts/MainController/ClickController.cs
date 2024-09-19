@@ -71,6 +71,11 @@ public class ClickController : MonoBehaviour
         {
             //发送操作
             GetComponentInParent<WebInteractionController>().SendAction( new Operation( new List<List<int>>(){ new List<int>(){FirstX, FirstY}, new List<int>(){SecondX, SecondY} }) );
+            GameObject block1 = GetComponentInParent<GameObjectController>().objectList[FirstX][FirstY], block2 = GetComponentInParent<GameObjectController>().objectList[SecondX][SecondY];
+            block1.GetComponent<BlockController>().lineRenderer.enabled = false;
+            block1.GetComponent<BlockController>().spriteRenderer.color = new Color(1, 1, 1, 1);
+            block2.GetComponent<BlockController>().lineRenderer.enabled = false;
+            block2.GetComponent<BlockController>().spriteRenderer.color = new Color(1, 1, 1, 1);
             ChooseOne = false;
             ChooseTwo = false;
             FirstX = -1;

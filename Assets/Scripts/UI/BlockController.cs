@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BlockController : MonoBehaviour
 {
     public Button blockButton;
-    private LineRenderer lineRenderer;
+    public LineRenderer lineRenderer;
     public SpriteRenderer spriteRenderer;
     public float bias;
     public Vector3 direction;

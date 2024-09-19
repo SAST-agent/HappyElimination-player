@@ -32,7 +32,7 @@ public class ModeController : MonoBehaviour
         var replayController = GetComponent<ReplayController>();
         replayController.ParseReplay(path);
         // 下面这一段代码是本地测试回放用的，部署的时候请注释掉
-
+        
         /*var initialData = replayController.GetInitialData();
         if (initialData == null)
         {

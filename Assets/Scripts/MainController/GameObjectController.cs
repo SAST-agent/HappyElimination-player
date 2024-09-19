@@ -6,7 +6,7 @@ public class GameObjectController : MonoBehaviour
 {
     public float bias;
     public GameObject[] prefabs;
-    List<List<GameObject>> objectList;
+    public List<List<GameObject>> objectList;
     // int[] top;
 
     public float swapTime;
