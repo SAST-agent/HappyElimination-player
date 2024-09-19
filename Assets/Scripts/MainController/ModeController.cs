@@ -45,7 +45,6 @@ public class ModeController : MonoBehaviour
     public void SwitchToInteractionMode()
     {
         SetMode(Constants.InteractMode);
-        // TODO 给后端发个消息初始化地图
     }
     
     
