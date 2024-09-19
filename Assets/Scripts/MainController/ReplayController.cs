@@ -89,12 +89,12 @@ public class ReplayController : MonoBehaviour
             Debug.Log("now round index is out of range");
             return;
         }
-        if (playing)
+        if (StateController.IsPlaying())
         {
             Debug.Log("there is a playing round");
             return;
         }
-        playing = true;
+        StateController.BeginPlaying();
         // swap and delete and new
         var roundToPlay = BackendData.Convert(replay.Datas[nowRound++]);
 
@@ -118,7 +118,7 @@ public class ReplayController : MonoBehaviour
         {
             CancelInvoke();
             StateController.UpdateInformation(roundToPlay);
-            playing = false;
+            StateController.EndPlaying();
             return;
         }
         StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);

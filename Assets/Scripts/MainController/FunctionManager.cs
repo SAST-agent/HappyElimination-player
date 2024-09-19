@@ -18,7 +18,7 @@ public class FunctionManager: MonoBehaviour
 
     private void Update()
     {
-        if (!ReplayController.playing && _functionQueue.Count > 0)
+        if (!StateController.IsPlaying() && _functionQueue.Count > 0)
         {
             HandleMessageQueue();
         }
@@ -31,7 +31,7 @@ public class FunctionManager: MonoBehaviour
             _functionQueue = new Queue<Tuple<Delegate, JsonData?>>();
         }
         _functionQueue.Enqueue(new Tuple<Delegate, JsonData?>(function, arg));
-        Debug.Log($"AddMessage {ReplayController.playing}");
+        Debug.Log($"AddMessage");
     }
     
     // 注意！！！！！！！！！！！！！！！！！！！！！！！

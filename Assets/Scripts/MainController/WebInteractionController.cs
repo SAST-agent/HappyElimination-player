@@ -97,7 +97,7 @@ public class WebInteractionController : MonoBehaviour
             content = sendAction
         };
         var jsonMessage = JsonConvert.SerializeObject(sendMessage);
-        Debug.Log(jsonMessage);
+        Debug.Log($"Send message {jsonMessage}");
         Write(jsonMessage);
     }
 
@@ -107,7 +107,7 @@ public class WebInteractionController : MonoBehaviour
     {
         try
         {
-            Debug.Log(information);
+            Debug.Log($"Received message from websocket: {information}");
             var judgerData = JsonConvert.DeserializeObject<JudgerData>(information);
             if (judgerData.request == "action")
             {
@@ -156,7 +156,6 @@ public class WebInteractionController : MonoBehaviour
                     int frameCount = Convert.ToInt32(msg.payload);
                     for (int i = 0; i < frameCount; i++)
                     {
-                        Debug.Log($"Get operation frame {i}");
                         Getoperation(i);
                     }
                     GetComponent<PlatformFuncController>().ReplayPlayerInited();

@@ -8,6 +8,8 @@ public class StateController : MonoBehaviour
 {
     // 隐藏游戏状态，只对外提供一部分接口
     private static GameState _gameState = new GameState();
+    
+    private static bool _playing = false;
 
     public static void StateInitialize(JsonData initialData)
     {
@@ -52,5 +54,20 @@ public class StateController : MonoBehaviour
     public static Map GetMap()
     {
         return _gameState.Map;
+    }
+
+    public static void BeginPlaying()
+    {
+        _playing = true;
+    }
+
+    public static void EndPlaying()
+    {
+        _playing = false;
+    }
+
+    public static bool IsPlaying()
+    {
+        return _playing;
     }
 }
