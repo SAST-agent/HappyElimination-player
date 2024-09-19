@@ -1,8 +1,14 @@
 ﻿using DataManager;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class InteractController: MonoBehaviour 
+public class InteractController: MonoBehaviour
 {
+    public GameObject GameInfo;
+    public GameObject finishSceen;
+    public Text winText;
+    public Text OperateText;
     // 将后端传递过来的信息显示在游戏上
     public void Interact(JsonData data)
     {
@@ -31,6 +37,8 @@ public class InteractController: MonoBehaviour
     // 处理每一回合的操作
     private void _HandleChange(JsonData data)
     {
+        ClickController.SetClickable(false);
+        OperateText.text = data.Player == PlatformFuncController.PlayerID ? "你的回合" : "对方回合";
         var operation = data.Operation;
         StateController.DoOperation(operation);
         GetComponent<GameObjectController>().SwapObject(
@@ -42,5 +50,7 @@ public class InteractController: MonoBehaviour
             StateController.MapStateUpdateStep(stateChange);
             GetComponent<GameObjectController>().UpdateMapObject(stateChange);
         }
+        GameInfo.GetComponent<GameInfoController>().SetGameInfo(data.Round, data.Scores[PlatformFuncController.PlayerID],data.Scores[1 - PlatformFuncController.PlayerID]);
+        ClickController.SetClickable(true);
     }
 }

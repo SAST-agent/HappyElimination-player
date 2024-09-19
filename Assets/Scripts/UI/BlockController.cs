@@ -12,7 +12,6 @@ public class BlockController : MonoBehaviour
     public Vector3 direction;
     float moveTime;
     float timer;
-    private float scaleFactor = 0.1f;
 
     public int row;
     public int col;

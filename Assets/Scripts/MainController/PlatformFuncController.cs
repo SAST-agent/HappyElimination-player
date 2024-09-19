@@ -8,6 +8,8 @@ using UnityEngine;
 // 与评测机通信需要用的类
 public class PlatformFuncController : MonoBehaviour
 {
+    public static int PlayerID;
+    public static string PlayerName;
     // 设置为交互模式
     public void SwitchToInteractionMode()
     {
@@ -58,12 +60,12 @@ public class PlatformFuncController : MonoBehaviour
     // 设置玩家ID
     public void SetPlayerId(int id)
     {
-        // TODO
+        PlayerID = id;
     }
     
     // 设置玩家名字
     public void SetPlayerNames(string name1, string name2)
     {
-        // TODO
+        PlayerName = name1;
     }
 }

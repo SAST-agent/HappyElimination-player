@@ -8,6 +8,7 @@ public class ClickController : MonoBehaviour
     private bool ChooseOne, ChooseTwo;
     private int FirstX = -1, FirstY = -1;
     private int SecondX = -1, SecondY = -1;
+    private static bool Clickable;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,8 +21,15 @@ public class ClickController : MonoBehaviour
         
     }
 
+    public static void SetClickable( bool able )
+    {
+        Clickable = able;
+    }
+
     public bool SetChosenBlock(int x, int y)
     {
+        if (!ModeController.IsInteractMode() || !Clickable)
+            return false;
         if (!ChooseOne)
         {
             FirstX = x;
@@ -67,7 +75,7 @@ public class ClickController : MonoBehaviour
 
     public void ConfirmClick()
     {
-        if (ChooseOne && ChooseTwo)
+        if (ChooseOne && ChooseTwo && Clickable)
         {
             //发送操作
             GetComponentInParent<WebInteractionController>().SendAction( new Operation( new List<List<int>>(){ new List<int>(){FirstX, FirstY}, new List<int>(){SecondX, SecondY} }) );
