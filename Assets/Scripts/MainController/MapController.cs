@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 地图控制器
+/// 封装了一些和GameObjectController的交互函数
+/// </summary>
 public class MapController : MonoBehaviour
 {
     public void MapInitialize(JsonData initialData)

@@ -5,10 +5,11 @@ using DataManager;
 using Unity.VisualScripting;
 using UnityEngine;
 
-// 与评测机通信需要用的类
+/// <summary>
+/// 网页通信控制器
+/// </summary>
 public class PlatformFuncController : MonoBehaviour
 {
-    public static int PlayerID;
     public static string PlayerName;
     // 设置为交互模式
     public void SwitchToInteractionMode()
@@ -33,6 +34,7 @@ public class PlatformFuncController : MonoBehaviour
 
     private void _LoadNextFrame()
     {
+        Debug.Log("LoadNextFrame");
         var replayController = gameObject.GetComponent<ReplayController>();
         replayController.PlayRound();
     }
@@ -60,7 +62,7 @@ public class PlatformFuncController : MonoBehaviour
     // 设置玩家ID
     public void SetPlayerId(int id)
     {
-        PlayerID = id;
+        StateController.setPlayer(id);
     }
     
     // 设置玩家名字

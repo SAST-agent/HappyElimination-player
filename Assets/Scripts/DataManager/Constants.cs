@@ -10,5 +10,7 @@
         public const int ErrorMode = 0;
         public const int ReplayMode = 1;
         public const int InteractMode = 2;
+        public const float TimeBeforeFirstFrame = 0.5f;
+        public const float TimeBetweenFrames = 1f;
     }
 }

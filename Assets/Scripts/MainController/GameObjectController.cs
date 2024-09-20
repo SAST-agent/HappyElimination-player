@@ -2,30 +2,26 @@ using DataManager;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 游戏物体控制器
+/// </summary>
 public class GameObjectController : MonoBehaviour
 {
     public float bias;
     public GameObject[] prefabs;
-    public List<List<GameObject>> objectList;
-    // int[] top;
+    public List<List<GameObject>> ObjectList;
 
     public float swapTime;
-    // public float animationSpeed;
     // Start is called before the first frame update
     void Start()
     {
-        objectList = new List<List<GameObject>>();
-        // top = new int[Constants.COL];
-        // for (int j = 0; j < Constants.COL; j++)
-        // {
-        //     top[j] = 0;
-        // }
+        ObjectList = new List<List<GameObject>>();
         for (int i = 0; i < Constants.ROW; i++)
         {
-            objectList.Add(new List<GameObject>());
+            ObjectList.Add(new List<GameObject>());
             for (int j = 0; j < Constants.COL; j++)
             {
-                objectList[i].Add(new GameObject());
+                ObjectList[i].Add(new GameObject());
             }
         }
     }
@@ -53,13 +49,13 @@ public class GameObjectController : MonoBehaviour
 
     public void SwapObject(int row1, int col1, int row2, int col2, float animationSpeed = 1.0f)
     {
-        var object1 = objectList[row1][col1];
-        var object2 = objectList[row2][col2];
+        var object1 = ObjectList[row1][col1];
+        var object2 = ObjectList[row2][col2];
         object1.name = "Block" + row2 + "_" + col2;
         object2.name = "Block" + row1 + "_" + col1;
 
-        objectList[row2][col2] = object1;
-        objectList[row1][col1] = object2;
+        ObjectList[row2][col2] = object1;
+        ObjectList[row1][col1] = object2;
 
         var motion1 = object1.GetComponent<BlockController>();
         motion1.SetPosition(row2, col2);
@@ -99,8 +95,8 @@ public class GameObjectController : MonoBehaviour
             // {
             //     top[block.Col] += 1;
             // }
-            var tmpObject = objectList[block.Row][block.Col];
-            objectList[block.Row][block.Col] = new GameObject();
+            var tmpObject = ObjectList[block.Row][block.Col];
+            ObjectList[block.Row][block.Col] = new GameObject();
             Destroy(tmpObject);
         }
     }
@@ -114,7 +110,7 @@ public class GameObjectController : MonoBehaviour
             for (int j = 0; j < Constants.COL; j++)
             { 
                 // Debug.Log(i + " " + j + " " + (int)map.Blocks[i][j].Type);
-                var tmpObject = objectList[i][j];
+                var tmpObject = ObjectList[i][j];
                 var newObject = Instantiate(prefabs[(int)map.Blocks[i][j].Type]);
 
                 newObject.name = "Block" + i + "_" + j;
@@ -134,7 +130,7 @@ public class GameObjectController : MonoBehaviour
                     newObject.transform.position = new Vector3(j * bias + 0.25f, -i * bias - 0.25f, 0) + mapObject.transform.position;
                 //}
                 
-                objectList[i][j] = newObject;
+                ObjectList[i][j] = newObject;
                 Destroy(tmpObject);
             }
         }
@@ -147,7 +143,7 @@ public class GameObjectController : MonoBehaviour
         {
             for (var j = 0; j < map.Col; j++)
             {
-                Destroy(objectList[i][j]);
+                Destroy(ObjectList[i][j]);
             }
         }
     }

@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
 
+/// <summary>
+/// 通信控制器
+/// </summary>
 public class WebInteractionController : MonoBehaviour
 {
     public string tokenB64;

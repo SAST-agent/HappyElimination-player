@@ -2,63 +2,54 @@ using System.Collections.Generic;
 using DataManager;
 using UnityEngine;
 
-
+/// <summary>
+/// 控制用户的点击事件
+/// </summary>
 public class ClickController : MonoBehaviour
 {
-    private bool ChooseOne, ChooseTwo;
-    private int FirstX = -1, FirstY = -1;
-    private int SecondX = -1, SecondY = -1;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private bool _chooseOne, _chooseTwo;
+    private int _firstX = -1, _firstY = -1;
+    private int _secondX = -1, _secondY = -1;
 
     public bool SetChosenBlock(int x, int y)
     {
         if (!ModeController.IsInteractMode() || StateController.IsPlaying())
             return false;
-        if (!ChooseOne)
+        if (!_chooseOne)
         {
-            FirstX = x;
-            FirstY = y;
-            ChooseOne = true;
+            _firstX = x;
+            _firstY = y;
+            _chooseOne = true;
             return true;
         }
-        if (FirstX == x && FirstY == y)
+        if (_firstX == x && _firstY == y)
         { 
-            if (!ChooseTwo)
+            if (!_chooseTwo)
             { 
-                ChooseOne = false;
-                FirstX = -1; 
-                FirstY = -1;
+                _chooseOne = false;
+                _firstX = -1; 
+                _firstY = -1;
             }
             else
             {
-                ChooseTwo = false;
-                FirstX = SecondX;
-                FirstY = SecondY;
-                SecondX = -1;
-                SecondY = -1;
+                _chooseTwo = false;
+                _firstX = _secondX;
+                _firstY = _secondY;
+                _secondX = -1;
+                _secondY = -1;
             }
             return false;
         }
-        if (!ChooseTwo)
+        if (!_chooseTwo)
         {
-            SecondX = x;
-            SecondY = y;
-            ChooseTwo = true;
+            _secondX = x;
+            _secondY = y;
+            _chooseTwo = true;
             return true;
         }
-        if (SecondX == x && SecondY == y)
+        if (_secondX == x && _secondY == y)
         {
-            ChooseTwo = false;
+            _chooseTwo = false;
         }
         else
         {
@@ -69,21 +60,21 @@ public class ClickController : MonoBehaviour
 
     public void ConfirmClick()
     {
-        if (ChooseOne && ChooseTwo && !StateController.IsPlaying())
+        if (_chooseOne && _chooseTwo && !StateController.IsPlaying())
         {
             //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction( new Operation( new List<List<int>>(){ new List<int>(){FirstX, FirstY}, new List<int>(){SecondX, SecondY} }) );
-            GameObject block1 = GetComponentInParent<GameObjectController>().objectList[FirstX][FirstY], block2 = GetComponentInParent<GameObjectController>().objectList[SecondX][SecondY];
+            GetComponentInParent<WebInteractionController>().SendAction( new Operation( new List<List<int>>(){ new List<int>(){_firstX, _firstY}, new List<int>(){_secondX, _secondY} }) );
+            GameObject block1 = GetComponentInParent<GameObjectController>().ObjectList[_firstX][_firstY], block2 = GetComponentInParent<GameObjectController>().ObjectList[_secondX][_secondY];
             block1.GetComponent<BlockController>().lineRenderer.enabled = false;
             block1.GetComponent<BlockController>().spriteRenderer.color = new Color(1, 1, 1, 1);
             block2.GetComponent<BlockController>().lineRenderer.enabled = false;
             block2.GetComponent<BlockController>().spriteRenderer.color = new Color(1, 1, 1, 1);
-            ChooseOne = false;
-            ChooseTwo = false;
-            FirstX = -1;
-            FirstY = -1;
-            SecondX = -1;
-            SecondY = -1;
+            _chooseOne = false;
+            _chooseTwo = false;
+            _firstX = -1;
+            _firstY = -1;
+            _secondX = -1;
+            _secondY = -1;
         }
     }
 }

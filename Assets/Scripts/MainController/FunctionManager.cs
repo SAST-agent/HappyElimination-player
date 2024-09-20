@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using DataManager;
 using UnityEngine;
 
+/// <summary>
+/// 消息队列
+/// </summary>
 #nullable enable
 public class FunctionManager: MonoBehaviour
 {
@@ -31,7 +34,7 @@ public class FunctionManager: MonoBehaviour
             _functionQueue = new Queue<Tuple<Delegate, JsonData?>>();
         }
         _functionQueue.Enqueue(new Tuple<Delegate, JsonData?>(function, arg));
-        // Debug.Log($"AddMessage");
+        Debug.Log("AddMessage");
     }
     
     // 注意！！！！！！！！！！！！！！！！！！！！！！！
@@ -42,7 +45,7 @@ public class FunctionManager: MonoBehaviour
     // 很有可能导致冲突从而让消息队列失效
     public void HandleMessageQueue()
     {
-        //Debug.Log("HandleMessageQueue");
+        Debug.Log("HandleMessageQueue");
         if (_functionQueue == null || _functionQueue.Count == 0)
         {
             return;

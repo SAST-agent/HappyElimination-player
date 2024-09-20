@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 每一个块的控制器
+/// </summary>
 public class BlockController : MonoBehaviour
 {
     public Button blockButton;

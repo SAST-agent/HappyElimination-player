@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using DataManager;
 using UnityEngine;
 
+/// <summary>
+/// 游戏模式控制器
+/// </summary>
 public class ModeController : MonoBehaviour
 {
     public enum Mode
@@ -16,13 +19,8 @@ public class ModeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // 下面这一段代码是本地测试回放用的，部署的时候请注释掉
         // SwitchToReplayMode("path.json");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     
     // 本地解析回放文件

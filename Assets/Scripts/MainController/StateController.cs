@@ -4,13 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 游戏状态控制器
+/// </summary>
 public class StateController : MonoBehaviour
 {
     // 隐藏游戏状态，只对外提供一部分接口
     private static GameState _gameState = new GameState();
     
     private static bool _playing = false;
-
+    
     public static void StateInitialize(JsonData initialData)
     {
         _gameState.Round = initialData.Round;
@@ -19,14 +22,6 @@ public class StateController : MonoBehaviour
         _gameState.Scores = initialData.Scores;
         _gameState.Map.ClearBlocks();
         _gameState.Map.UpdateMap(initialData.StateChanges);
-    }
-
-    public static void StateUpdate(JsonData roundData)
-    {
-        _gameState.Round = roundData.Round;
-        _gameState.Player = roundData.Player;
-        _gameState.Steps = roundData.Steps;
-        _gameState.Scores = roundData.Scores;
     }
 
     public static List<List<List<int>>> MapStateUpdateStep(StateChange stateChange)
@@ -50,8 +45,33 @@ public class StateController : MonoBehaviour
         _gameState.Player = roundToPlay.Player;
         _gameState.Steps = roundToPlay.Steps;
         _gameState.Scores = roundToPlay.Scores;
-        
     }
+
+    public static int getRound()
+    {
+        return _gameState.Round;
+    }
+
+    public static int getPlayer()
+    {
+        return _gameState.Player;
+    }
+
+    public static void setPlayer(int player)
+    {
+        _gameState.Player = player;
+    }
+
+    public static int getSteps()
+    {
+        return _gameState.Steps;
+    }
+
+    public static List<int> getScores()
+    {
+        return _gameState.Scores;
+    }
+    
     public static Map GetMap()
     {
         return _gameState.Map;
@@ -71,4 +91,5 @@ public class StateController : MonoBehaviour
     {
         return _playing;
     }
+
 }

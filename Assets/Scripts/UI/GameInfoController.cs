@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 信息面板控制器
+/// </summary>
 public class GameInfoController : MonoBehaviour
 {
     public Text gameRound;
@@ -29,13 +32,13 @@ public class GameInfoController : MonoBehaviour
     {
         if (ModeController.IsInteractMode())
         {
-            gameRound.text = "当前回合: " + round.ToString();
+            gameRound.text = "当前回合: " + (round + 1).ToString();
             playerScore.text = "你的分数: " + player.ToString();
             opponentScore.text = "对手分数: " + opponent.ToString();
         }
         else
         {
-            gameRound.text = "当前回合: " + round.ToString();
+            gameRound.text = "当前回合: " + (round + 1).ToString();
             playerScore.text = "0号玩家分数: " + player.ToString();
             opponentScore.text = "1号玩家分数: " + opponent.ToString();
         }
@@ -49,5 +52,12 @@ public class GameInfoController : MonoBehaviour
             player = _player;
             opponent = _opponent;
         }
+    }
+
+    public void UpdateGameInfo()
+    {
+        round = StateController.getRound();
+        player = StateController.getScores()[StateController.getPlayer()];
+        opponent = StateController.getScores()[1 - StateController.getPlayer()];
     }
 }

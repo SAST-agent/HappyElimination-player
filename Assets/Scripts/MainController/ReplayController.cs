@@ -6,88 +6,75 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// 回放模式控制器
+/// </summary>
 public class ReplayController : MonoBehaviour
 {
     public int nowRound;
     public int nowEliminateStep;
     // public int eliminateSteps;
-    JsonFile replay;
-    public static bool playing;
-    public GameObject GameInfo;
+    JsonFile _replay;
     public float animationSpeed;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void ParseReplay(string filePath)
     {
         try
         {
-            replay = JsonParse.ReplayFileParse(filePath);
+            _replay = JsonParse.ReplayFileParse(filePath);
         }
         catch (Exception)
         {
-            replay = new JsonFile();
+            _replay = new JsonFile();
         }
     }
 
     public void AddDataToReplay(BackendData backendData)
     {
-        replay.Add(backendData);
+        _replay.Add(backendData);
     }
 
     public JsonData GetInitialData()
     {
-        if (replay?.Datas == null || replay.Datas.Count == 0)
+        if (_replay?.Datas == null || _replay.Datas.Count == 0)
         {
             return null;
         }
-        var data = replay.Datas[0];
-        return BackendData.Convert(replay.Datas[0]);
+        return BackendData.Convert(_replay.Datas[0]);
     }
 
     public void PlayRoundNumber(int index)
     {
         Debug.Log($"Load the round {index}");
-        if (index >= replay.Datas.Count)
+        if (index >= _replay.Datas.Count)
         {
             Debug.Log($"frame index {index} out of range");
             return;
         }
         var initialData = GetInitialData();
-        /*for (int i = 0; i < initialData.StateChanges[0].NewBlocks.Count; i++)
-        {
-            var block = initialData.StateChanges[0].NewBlocks[i];
-            Debug.Log($"{block.Row}, {block.Col}: {block.Type}");
-        }*/
         StateController.StateInitialize(initialData);
         // update map
         for (int i = 1; i < index; i++)
         {
-            var data = BackendData.Convert(replay.Datas[i]);
+            var data = BackendData.Convert(_replay.Datas[i]);
+            StateController.UpdateInformation(data);
             StateController.DoOperation(data.Operation);
             StateController.MapStateUpdate(data.StateChanges);
-            GameInfo.GetComponent<GameInfoController>().SetGameInfo(data.Round,
-                data.Scores.Count > 0 ? data.Scores[0] : 0,
-                data.Scores.Count > 0 ? data.Scores[1] : 0);
+            if (data.StopReason != null)
+            {
+                GetComponent<UIController>().GameStop(data.StopReason);
+            }
         }
+        GetComponent<UIController>().UpdateGameInfo();
         GetComponent<MapController>().ReGenerateMap();
         nowRound = index;
     }
 
     public void PlayRound()
     {
-        if (nowRound >= replay.Datas.Count)
+        if (nowRound >= _replay.Datas.Count)
         {
             Debug.Log("now round index is out of range");
             return;
@@ -98,33 +85,27 @@ public class ReplayController : MonoBehaviour
             return;
         }
         StateController.BeginPlaying();
-        // swap and delete and new
-        var roundToPlay = BackendData.Convert(replay.Datas[nowRound++]);
+        var roundToPlay = BackendData.Convert(_replay.Datas[nowRound++]);
         StateController.DoOperation(roundToPlay.Operation);
+        StateController.UpdateInformation(roundToPlay);
         GetComponent<MapController>().DoOperationOnMap(roundToPlay.Operation, animationSpeed);
-        
-        // stateController.StateInitialize(roundToPlay);
         nowEliminateStep = 0;
-        // eliminateSteps = roundToPlay.StateChanges.Count;
-        
         Invoke(nameof(UpdateMapStep), 0.5f / animationSpeed);
-        // TODO: finish round playing
     }
-    // (swap) and (delete and new) in interaction controller
 
     void UpdateMapStep()
     {
         Debug.Log($"Eliminate step {nowEliminateStep}");
-        var roundToPlay = BackendData.Convert(replay.Datas[nowRound - 1]);
+        var roundToPlay = BackendData.Convert(_replay.Datas[nowRound - 1]);
         if (nowEliminateStep >= roundToPlay.StateChanges.Count)
         {
             CancelInvoke();
-            StateController.UpdateInformation(roundToPlay);
+            GetComponent<UIController>().UpdateGameInfo();
+            if (roundToPlay.StopReason != null)
+            {
+                GetComponent<UIController>().GameStop(roundToPlay.StopReason);
+            }
             StateController.EndPlaying();
-            Debug.Log("scores: "+ roundToPlay.StateChanges.Count);
-            GameInfo.GetComponent<GameInfoController>().SetGameInfo(roundToPlay.Round,
-                roundToPlay.Scores.Count > 0 ? roundToPlay.Scores[0] : 0,
-                roundToPlay.Scores.Count > 0 ? roundToPlay.Scores[1] : 0);
             return;
         }
         StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);

@@ -87,6 +87,7 @@ namespace DataManager
         public List<int> Scores { get; set; }
         public Operation Operation { get; set; }
         public List<StateChange> StateChanges { get; set; }
+        public string StopReason { get; set; }
 
         public JsonData()
         {
@@ -96,9 +97,12 @@ namespace DataManager
             Scores = null;
             Operation = null;
             StateChanges = null;
+            StopReason = null;
         }
     }
     
+    // 处理后端出过来的数据
+    // 注意key要与后端发送的一致否则序列化会失败
     public class BackendData
     {
         public int Round { get; set; }
@@ -135,7 +139,8 @@ namespace DataManager
                 Player = backendData.Player, 
                 Steps = backendData.Steps, 
                 Scores = backendData.Score,
-                Operation = new Operation(backendData.Operation)
+                Operation = new Operation(backendData.Operation),
+                StopReason = backendData.StopReason
             };
             var stateChanges = new List<StateChange>();
             var manyTimesBlockChanges = backendData.ManyTimesNewBlocks.Zip(

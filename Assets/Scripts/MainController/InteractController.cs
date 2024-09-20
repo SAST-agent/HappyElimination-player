@@ -1,19 +1,24 @@
 using System;
 using System.Collections.Generic;
 using DataManager;
+using Newtonsoft.Json;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+/// <summary>
+/// 交互状态控制器
+/// </summary>
 public class InteractController: MonoBehaviour
 {
     private List<StateChange> _stateChanges;
-    private int _nowStep;
+    private int _nowEliminateStep;
+    private string _curStopReason;
     
-    public GameObject GameInfo;
-    public GameObject finishSceen;
-    public Text winText;
-    public Text OperateText;
+    public GameObject finishScreen;
+    public Text winText; 
+    public Text operateText;
     // 将后端传递过来的信息显示在游戏上
     public void Interact(JsonData data)
     {
@@ -43,33 +48,37 @@ public class InteractController: MonoBehaviour
     // 处理每一回合的操作
     private void _HandleChange(JsonData data)
     {
+        Debug.Log("HandleChange");
+        Debug.Log(JsonConvert.SerializeObject(data));
         StateController.BeginPlaying();
-        OperateText.text = data.Player == PlatformFuncController.PlayerID ? "你的回合" : "对方回合";
-        var operation = data.Operation;
         StateController.UpdateInformation(data);
-        StateController.DoOperation(operation);
+        StateController.DoOperation(data.Operation);
         GetComponent<MapController>().DoOperationOnMap(data.Operation);
+        _curStopReason = data.StopReason;
+        operateText.text = data.Player == StateController.getPlayer() ? "你的回合" : "对方回合";
         _stateChanges = data.StateChanges;
-        _nowStep = 0;
-        //Debug.Log("Begin Update Map Step 0");
-        Invoke(nameof(UpdateMapStep), 0.5f);
-        //Debug.Log("End Update Map Step 0");
+        _nowEliminateStep = 0;
+        Invoke(nameof(UpdateMapStep), Constants.TimeBeforeFirstFrame);
     }
 
     private void UpdateMapStep()
     {
-        //Debug.Log($"Begin Update Map Step {_nowStep}");
-        if (_nowStep >= _stateChanges.Count)
+        if (_nowEliminateStep >= _stateChanges.Count)
         {
             CancelInvoke();
+            GetComponent<UIController>().UpdateGameInfo();
+            if (_curStopReason != null)
+            {
+                GetComponent<UIController>().GameStop(_curStopReason);
+                // TODO 结束后禁用交互
+            }
             StateController.EndPlaying();
             return;
         }
-        StateController.MapStateUpdateStep(_stateChanges[_nowStep]);
-        GetComponent<MapController>().UpdateMap(_stateChanges[_nowStep]);
-        _nowStep += 1;
-        Invoke(nameof(UpdateMapStep), 1f);
-        //Debug.Log($"End Update Map Step {_nowStep}");
+        StateController.MapStateUpdateStep(_stateChanges[_nowEliminateStep]);
+        GetComponent<MapController>().UpdateMap(_stateChanges[_nowEliminateStep]);
+        _nowEliminateStep += 1;
+        Invoke(nameof(UpdateMapStep), Constants.TimeBetweenFrames);
         
     }
 }
