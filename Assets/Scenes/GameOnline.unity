@@ -195,6 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nowRound: 1
   nowEliminateStep: 0
+  GameInfo: {fileID: 725737141}
   animationSpeed: 1
 --- !u!114 &169101993
 MonoBehaviour:
@@ -261,7 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameInfo: {fileID: 725737141}
   finishSceen: {fileID: 789091239}
-  winText: {fileID: 0}
+  winText: {fileID: 2021632886}
   OperateText: {fileID: 413609849}
 --- !u!114 &169101998
 MonoBehaviour:
@@ -582,7 +583,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u4F60\u7684\u56DE\u5408"
+  m_Text: "\u89C2\u6218\u6A21\u5F0F"
 --- !u!222 &413609850
 CanvasRenderer:
   m_ObjectHideFlags: 0

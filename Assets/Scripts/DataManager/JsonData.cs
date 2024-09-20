@@ -104,7 +104,7 @@ namespace DataManager
         public int Round { get; set; }
         public int Player { get; set; }
         public int Steps { get; set; }
-        public List<int> Scores { get; set; }
+        public List<int> Score { get; set; }
         public List<List<int>> Operation { get; set; }
         public List<List<List<int>>> ManyTimesNewBlocks { get; set; }
         public List<List<List<int>>> ManyTimesEliminateBlocks { get; set; }
@@ -115,7 +115,7 @@ namespace DataManager
             Round = -1;
             Player = -1;
             Steps = -1;
-            Scores = null;
+            Score = null;
             Operation = null;
             ManyTimesNewBlocks = null;
             ManyTimesEliminateBlocks = null;
@@ -134,7 +134,7 @@ namespace DataManager
                 Round = backendData.Round, 
                 Player = backendData.Player, 
                 Steps = backendData.Steps, 
-                Scores = backendData.Scores,
+                Scores = backendData.Score,
                 Operation = new Operation(backendData.Operation)
             };
             var stateChanges = new List<StateChange>();

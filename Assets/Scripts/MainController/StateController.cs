@@ -50,6 +50,7 @@ public class StateController : MonoBehaviour
         _gameState.Player = roundToPlay.Player;
         _gameState.Steps = roundToPlay.Steps;
         _gameState.Scores = roundToPlay.Scores;
+        
     }
     public static Map GetMap()
     {

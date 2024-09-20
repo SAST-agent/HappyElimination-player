@@ -68,17 +68,16 @@ public class BlockController : MonoBehaviour
     
     private void OnMouseDown()
     {
-        Debug.Log(row + "," + col);
         if (GameObject.Find("Main Controller").GetComponent<ClickController>().SetChosenBlock(row, col))
         {
+            Debug.Log("choose block " + row + "," + col);
             lineRenderer.enabled = true;
-            spriteRenderer.color = new Color(0.5f, 0.5f, 0.5f, 1); // RGBA
+            spriteRenderer.color = new Color(0.5f, 0.5f, 0.5f, 1);
         }
         else
         {
             lineRenderer.enabled = false;
-            // 改变颜色为红色，完全不透明
-            spriteRenderer.color = new Color(1, 1, 1, 1); // RGBA
+            spriteRenderer.color = new Color(1, 1, 1, 1);
         }
     }
 }

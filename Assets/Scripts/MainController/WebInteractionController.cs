@@ -42,9 +42,9 @@ public class WebInteractionController : MonoBehaviour
         {
             var bytes = Convert.FromBase64String(token);
             var uri = Encoding.UTF8.GetString(bytes);
-
-            GetComponent<PlatformFuncController>().SetPlayerId(uri[^1]);
-
+            Debug.Log(uri);
+            GetComponent<PlatformFuncController>().SetPlayerId(int.Parse(uri[^1].ToString()));
+            
             Connect_ws("wss://" + uri);
             return true;
         }
@@ -97,7 +97,7 @@ public class WebInteractionController : MonoBehaviour
             content = sendAction
         };
         var jsonMessage = JsonConvert.SerializeObject(sendMessage);
-        Debug.Log($"Send message {jsonMessage}");
+        //Debug.Log($"Send message {jsonMessage}");
         Write(jsonMessage);
     }
 

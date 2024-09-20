@@ -17,7 +17,7 @@ public class InteractController: MonoBehaviour
     // 将后端传递过来的信息显示在游戏上
     public void Interact(JsonData data)
     {
-        Debug.Log($"Round: {data.Round}, Player: {data.Player}, Operation: {data.Operation}");
+        //Debug.Log($"Round: {data.Round}, Player: {data.Player}, Operation: {data.Operation}");
         if (!ModeController.IsInteractMode())
         {
             return;
@@ -44,7 +44,6 @@ public class InteractController: MonoBehaviour
     private void _HandleChange(JsonData data)
     {
         StateController.BeginPlaying();
-        ClickController.SetClickable(false);
         OperateText.text = data.Player == PlatformFuncController.PlayerID ? "你的回合" : "对方回合";
         var operation = data.Operation;
         StateController.UpdateInformation(data);
@@ -52,14 +51,14 @@ public class InteractController: MonoBehaviour
         GetComponent<MapController>().DoOperationOnMap(data.Operation);
         _stateChanges = data.StateChanges;
         _nowStep = 0;
-        Debug.Log("Begin Update Map Step 0");
+        //Debug.Log("Begin Update Map Step 0");
         Invoke(nameof(UpdateMapStep), 0.5f);
-        Debug.Log("End Update Map Step 0");
+        //Debug.Log("End Update Map Step 0");
     }
 
     private void UpdateMapStep()
     {
-        Debug.Log($"Begin Update Map Step {_nowStep}");
+        //Debug.Log($"Begin Update Map Step {_nowStep}");
         if (_nowStep >= _stateChanges.Count)
         {
             CancelInvoke();
@@ -70,8 +69,7 @@ public class InteractController: MonoBehaviour
         GetComponent<MapController>().UpdateMap(_stateChanges[_nowStep]);
         _nowStep += 1;
         Invoke(nameof(UpdateMapStep), 1f);
-        Debug.Log($"End Update Map Step {_nowStep}");
-        GameInfo.GetComponent<GameInfoController>().SetGameInfo(data.Round, data.Scores[PlatformFuncController.PlayerID],data.Scores[1 - PlatformFuncController.PlayerID]);
-        ClickController.SetClickable(true);
+        //Debug.Log($"End Update Map Step {_nowStep}");
+        
     }
 }

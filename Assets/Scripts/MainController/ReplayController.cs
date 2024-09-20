@@ -14,7 +14,7 @@ public class ReplayController : MonoBehaviour
     // public int eliminateSteps;
     JsonFile replay;
     public static bool playing;
-
+    public GameObject GameInfo;
     public float animationSpeed;
     
     // Start is called before the first frame update
@@ -77,6 +77,9 @@ public class ReplayController : MonoBehaviour
             var data = BackendData.Convert(replay.Datas[i]);
             StateController.DoOperation(data.Operation);
             StateController.MapStateUpdate(data.StateChanges);
+            GameInfo.GetComponent<GameInfoController>().SetGameInfo(data.Round,
+                data.Scores.Count > 0 ? data.Scores[0] : 0,
+                data.Scores.Count > 0 ? data.Scores[1] : 0);
         }
         GetComponent<MapController>().ReGenerateMap();
         nowRound = index;
@@ -97,14 +100,13 @@ public class ReplayController : MonoBehaviour
         StateController.BeginPlaying();
         // swap and delete and new
         var roundToPlay = BackendData.Convert(replay.Datas[nowRound++]);
-
         StateController.DoOperation(roundToPlay.Operation);
         GetComponent<MapController>().DoOperationOnMap(roundToPlay.Operation, animationSpeed);
-
+        
         // stateController.StateInitialize(roundToPlay);
         nowEliminateStep = 0;
         // eliminateSteps = roundToPlay.StateChanges.Count;
-
+        
         Invoke(nameof(UpdateMapStep), 0.5f / animationSpeed);
         // TODO: finish round playing
     }
@@ -119,6 +121,10 @@ public class ReplayController : MonoBehaviour
             CancelInvoke();
             StateController.UpdateInformation(roundToPlay);
             StateController.EndPlaying();
+            Debug.Log("scores: "+ roundToPlay.StateChanges.Count);
+            GameInfo.GetComponent<GameInfoController>().SetGameInfo(roundToPlay.Round,
+                roundToPlay.Scores.Count > 0 ? roundToPlay.Scores[0] : 0,
+                roundToPlay.Scores.Count > 0 ? roundToPlay.Scores[1] : 0);
             return;
         }
         StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);

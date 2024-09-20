@@ -100,7 +100,7 @@ namespace DataManager
             var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
             if (updateResult != 0)
             {
-                Debug.Log(updateResult);
+                // Debug.Log(updateResult);
                 return null;
             }
             return changeResult.Item2;
