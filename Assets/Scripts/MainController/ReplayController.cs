@@ -1,102 +1,116 @@
+using System;
 using DataManager;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// 回放模式控制器
+/// </summary>
 public class ReplayController : MonoBehaviour
 {
     public int nowRound;
     public int nowEliminateStep;
     // public int eliminateSteps;
-    JsonFile replay;
-    bool playing;
-
+    JsonFile _replay;
     public float animationSpeed;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void ParseReplay(string filePath)
     {
-        replay = JsonParse.ReplayFileParse(filePath);
+        try
+        {
+            _replay = JsonParse.ReplayFileParse(filePath);
+        }
+        catch (Exception)
+        {
+            _replay = new JsonFile();
+        }
+    }
+
+    public void AddDataToReplay(BackendData backendData)
+    {
+        _replay.Add(backendData);
     }
 
     public JsonData GetInitialData()
     {
-        return BackendData.Convert(replay.Datas[0]);
+        if (_replay?.Datas == null || _replay.Datas.Count == 0)
+        {
+            return null;
+        }
+        return BackendData.Convert(_replay.Datas[0]);
     }
 
     public void PlayRoundNumber(int index)
     {
-        var initialData = GetInitialData();
-        // Debug.Log(initialData);
-        if (index >= replay.Datas.Count)
+        Debug.Log($"Load the round {index}");
+        if (index >= _replay.Datas.Count)
         {
-            Debug.Log("frame index out of range");
+            Debug.Log($"frame index {index} out of range");
             return;
         }
-        var stateController = GetComponent<StateController>();
-        stateController.StateInitialize(initialData);
+        var initialData = GetInitialData();
+        StateController.StateInitialize(initialData);
         // update map
-        for (int i = 1; i <= index; i++)
+        for (int i = 1; i < index; i++)
         {
-            var data = BackendData.Convert(replay.Datas[i]);
-            stateController.DoOperation(data.Operation);
-            stateController.MapStateUpdate(data.StateChanges);
+            var data = BackendData.Convert(_replay.Datas[i]);
+            StateController.UpdateInformation(data);
+            StateController.DoOperation(data.Operation);
+            StateController.MapStateUpdate(data.StateChanges);
+            if (data.StopReason != null)
+            {
+                GetComponent<UIController>().GameStop(data.StopReason);
+            }
         }
-        stateController.StateUpdate(BackendData.Convert(replay.Datas[index]));
-
-        GetComponent<MapController>().MapInitialize(initialData);
+        GetComponent<UIController>().UpdateGameInfo();
+        GetComponent<MapController>().ReGenerateMap();
+        nowRound = index;
     }
 
     public void PlayRound()
     {
-        if (nowRound >= replay.Datas.Count || playing)
+        if (nowRound >= _replay.Datas.Count)
         {
-            Debug.Log("there is a round playing or now round index is out of range");
+            Debug.Log("now round index is out of range");
             return;
         }
-        playing = true;
-        // swap and delete and new
-        var roundToPlay = BackendData.Convert(replay.Datas[nowRound++]);
-        var objectController = GetComponent<GameObjectController>();
-        var stateController = GetComponent<StateController>();
-
-        stateController.DoOperation(roundToPlay.Operation);
-        objectController.SwapObject(roundToPlay.Operation.Block1.Row, roundToPlay.Operation.Block1.Col, roundToPlay.Operation.Block2.Row, roundToPlay.Operation.Block2.Col, animationSpeed);
-
-        // stateController.StateInitialize(roundToPlay);
+        if (StateController.IsPlaying())
+        {
+            Debug.Log("there is a playing round");
+            return;
+        }
+        StateController.BeginPlaying();
+        var roundToPlay = BackendData.Convert(_replay.Datas[nowRound++]);
+        StateController.DoOperation(roundToPlay.Operation);
+        StateController.UpdateInformation(roundToPlay);
+        GetComponent<MapController>().DoOperationOnMap(roundToPlay.Operation, animationSpeed);
         nowEliminateStep = 0;
-        // eliminateSteps = roundToPlay.StateChanges.Count;
-
         Invoke(nameof(UpdateMapStep), 0.5f / animationSpeed);
-        // TODO: finish round playing
     }
-    // (swap) and (delete and new) in interaction controller
 
     void UpdateMapStep()
     {
-        var roundToPlay = BackendData.Convert(replay.Datas[nowRound - 1]);
-        var stateController = GetComponent<StateController>();
+        Debug.Log($"Eliminate step {nowEliminateStep}");
+        var roundToPlay = BackendData.Convert(_replay.Datas[nowRound - 1]);
         if (nowEliminateStep >= roundToPlay.StateChanges.Count)
         {
             CancelInvoke();
-            stateController.UpdateInformation(roundToPlay);
-            playing = false;
+            GetComponent<UIController>().UpdateGameInfo();
+            if (roundToPlay.StopReason != null)
+            {
+                GetComponent<UIController>().GameStop(roundToPlay.StopReason);
+            }
+            StateController.EndPlaying();
             return;
         }
-        var downingBlocks = stateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
-        var objectController = GetComponent<GameObjectController>();
-        objectController.UpdateMapObject(roundToPlay.StateChanges[nowEliminateStep++], animationSpeed);
+        StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
+        GetComponent<MapController>().UpdateMap(roundToPlay.StateChanges[nowEliminateStep], animationSpeed);
+        nowEliminateStep += 1;
         Invoke(nameof(UpdateMapStep), 1f / animationSpeed);
     }
 }

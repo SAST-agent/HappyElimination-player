@@ -58,13 +58,22 @@ namespace DataManager
             }
         }
         
+        // 清空一个地图中的块
+        public void ClearBlocks()
+        {
+            foreach (var row in Blocks)
+            {
+                foreach (var block in row)
+                {
+                    block.Type = BlockType.TypeZero;
+                }
+            }
+        }
+        
         // 交换两个地块类型的内部函数
         private static void _SwapType(Block block1, Block block2)
         {
             (block1.Type, block2.Type) = (block2.Type, block1.Type);
-            // Debug.Log(block1.Row + " " + block1.Col + " to " + block1.Type);
-            // Debug.Log(block2.Row + " " + block2.Col + " to " + block2.Type);
-            
         }
         
         // 交换两个地块
@@ -91,6 +100,7 @@ namespace DataManager
             var updateResult = UpdateSomeBlocks(stateChange.NewBlocks);
             if (updateResult != 0)
             {
+                // Debug.Log(updateResult);
                 return null;
             }
             return changeResult.Item2;
@@ -179,7 +189,6 @@ namespace DataManager
                     return (int)ReturnType.InvalidBlockType;
                 }
                 theBlock.Type = block.Type;
-                // Debug.Log("The Block (" + theBlock.Row + ", " + theBlock.Col + ") to " + theBlock.Type);
             }
             return (int)ReturnType.Correct;
         }

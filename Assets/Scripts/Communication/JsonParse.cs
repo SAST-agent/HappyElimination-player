@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using DataManager;
 using Newtonsoft.Json;
+using UnityEngine;
+
 public class JsonParse
 {
 
@@ -15,7 +17,7 @@ public class JsonParse
         var datas = new JsonFile();
         using (StreamReader sr = new StreamReader(filePath))
         {
-            string line = sr.ReadLine();
+            var line = sr.ReadLine();
             while (line != null)
             {
                 datas.Add(BackendInfoParse(line));

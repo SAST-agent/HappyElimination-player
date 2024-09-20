@@ -1,82 +1,95 @@
+using System;
 using DataManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 游戏状态控制器
+/// </summary>
 public class StateController : MonoBehaviour
 {
-    GameState gameState = new GameState();
-    // Start is called before the first frame update
-    void Start()
+    // 隐藏游戏状态，只对外提供一部分接口
+    private static GameState _gameState = new GameState();
+    
+    private static bool _playing = false;
+    
+    public static void StateInitialize(JsonData initialData)
     {
-        
+        _gameState.Round = initialData.Round;
+        _gameState.Player = initialData.Player;
+        _gameState.Steps = initialData.Steps;
+        _gameState.Scores = initialData.Scores;
+        _gameState.Map.ClearBlocks();
+        _gameState.Map.UpdateMap(initialData.StateChanges);
     }
 
-    // Update is called once per frame
-    void Update()
+    public static List<List<List<int>>> MapStateUpdateStep(StateChange stateChange)
     {
-        
+        return _gameState.Map.UpdateMapForOneStep(stateChange);
     }
 
-    public void StateInitialize(JsonData initialData)
+    public static void MapStateUpdate(List<StateChange> stateChanges)
     {
-        gameState.Round = initialData.Round;
-        gameState.Player = initialData.Player;
-        gameState.Steps = initialData.Steps;
-        gameState.Scores = initialData.Scores;
-        gameState.Map.UpdateMap(initialData.StateChanges);
+        _gameState.Map.UpdateMap(stateChanges);
     }
 
-    public void StateUpdate(JsonData roundData)
+    public static void DoOperation(Operation operation)
     {
-        gameState.Round = roundData.Round;
-        gameState.Player = roundData.Player;
-        gameState.Steps = roundData.Steps;
-        gameState.Scores = roundData.Scores;
-        // gameState.Map.UpdateMapTo(index);
+        _gameState.Map.SwapBlock(operation);
     }
 
-    public List<List<List<int>>> MapStateUpdateStep(StateChange stateChange)
+    public static void UpdateInformation(JsonData roundToPlay)
     {
-        return gameState.Map.UpdateMapForOneStep(stateChange);
+        _gameState.Round = roundToPlay.Round;
+        _gameState.Player = roundToPlay.Player;
+        _gameState.Steps = roundToPlay.Steps;
+        _gameState.Scores = roundToPlay.Scores;
     }
 
-    public void MapStateUpdate(List<StateChange> stateChanges)
+    public static int getRound()
     {
-        gameState.Map.UpdateMap(stateChanges);
+        return _gameState.Round;
     }
 
-    public void DoOperation(Operation operation)
+    public static int getPlayer()
     {
-        gameState.Map.SwapBlock(operation);
+        return _gameState.Player;
     }
 
-    public void UpdateInformation(JsonData roundToPlay)
+    public static void setPlayer(int player)
     {
-        gameState.Round = roundToPlay.Round;
-        gameState.Player = roundToPlay.Player;
-        gameState.Steps = roundToPlay.Steps;
-        gameState.Scores = roundToPlay.Scores;
-    }
-    public Map GetMap()
-    {
-        return gameState.Map;
+        _gameState.Player = player;
     }
 
-    public void changeMap() // 测试用的
+    public static int getSteps()
     {
-        Debug.Log(gameState.Map.Blocks[0][0].Type);
-        Debug.Log(gameState.Map.Blocks[1][0].Type);
-        Debug.Log(gameState.Map.Blocks[2][0].Type);
-        Debug.Log(gameState.Map.Blocks[3][0].Type);
-        Debug.Log(gameState.Map.Blocks[4][0].Type);
-        var back_info = JsonParse.ReplayFileParse("init.json").Datas[0];
-        var json = BackendData.Convert(back_info);
-        gameState.Map.UpdateMap(json.StateChanges);
-        Debug.Log(gameState.Map.Blocks[0][0].Type);
-        Debug.Log(gameState.Map.Blocks[1][0].Type);
-        Debug.Log(gameState.Map.Blocks[2][0].Type);
-        Debug.Log(gameState.Map.Blocks[3][0].Type);
-        Debug.Log(gameState.Map.Blocks[4][0].Type);
+        return _gameState.Steps;
     }
+
+    public static List<int> getScores()
+    {
+        return _gameState.Scores;
+    }
+    
+    public static Map GetMap()
+    {
+        return _gameState.Map;
+    }
+
+    public static void BeginPlaying()
+    {
+        _playing = true;
+    }
+
+    public static void EndPlaying()
+    {
+        _playing = false;
+    }
+
+    public static bool IsPlaying()
+    {
+        return _playing;
+    }
+
 }

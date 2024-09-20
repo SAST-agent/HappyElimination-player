@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Unity.VisualScripting;
 
 namespace DataManager
@@ -31,6 +32,11 @@ namespace DataManager
                 Block2 = new Block(list[1]);
             }
         }
+
+        public override string ToString()
+        {
+            return $"{Block1.Row} {Block1.Col} {Block2.Row} {Block2.Col}";
+        }
     }
     
     public class StateChange
@@ -57,12 +63,17 @@ namespace DataManager
             EliminateBlocks = new List<Block>();
             foreach (var block in newBlocks)
             {
-                NewBlocks.Add(new Block(block));
+                if (block != null && block.Count >= 3)
+                {
+                    NewBlocks.Add(new Block(block));
+                }
             }
-
             foreach (var block in eliminateBlocks)
             {
-                EliminateBlocks.Add(new Block(block));
+                if (block != null && block.Count >= 2)
+                {
+                    EliminateBlocks.Add(new Block(block));
+                }
             }
         }
     }
@@ -76,6 +87,7 @@ namespace DataManager
         public List<int> Scores { get; set; }
         public Operation Operation { get; set; }
         public List<StateChange> StateChanges { get; set; }
+        public string StopReason { get; set; }
 
         public JsonData()
         {
@@ -85,40 +97,33 @@ namespace DataManager
             Scores = null;
             Operation = null;
             StateChanges = null;
+            StopReason = null;
         }
     }
     
+    // 处理后端出过来的数据
+    // 注意key要与后端发送的一致否则序列化会失败
     public class BackendData
     {
         public int Round { get; set; }
         public int Player { get; set; }
         public int Steps { get; set; }
-        public List<int> Scores { get; set; }
+        public List<int> Score { get; set; }
         public List<List<int>> Operation { get; set; }
         public List<List<List<int>>> ManyTimesNewBlocks { get; set; }
         public List<List<List<int>>> ManyTimesEliminateBlocks { get; set; }
+        public string StopReason { get; set; }
 
         public BackendData()
         {
             Round = -1;
             Player = -1;
             Steps = -1;
-            Scores = null;
+            Score = null;
             Operation = null;
             ManyTimesNewBlocks = null;
             ManyTimesEliminateBlocks = null;
-        }
-
-        public BackendData(int round, int player, int steps, List<int> scores, List<List<int>> operation, 
-            List<List<List<int>>> newBlocks, List<List<List<int>>> eliminateBlocks)
-        {
-            Round = round;
-            Player = player;
-            Steps = steps;
-            Scores = scores;
-            Operation = operation;
-            ManyTimesNewBlocks = newBlocks;
-            ManyTimesEliminateBlocks = eliminateBlocks;
+            StopReason = null;
         }
         
         // 将后端传过来的信息转换为前端可以解析的JsonData
@@ -133,8 +138,9 @@ namespace DataManager
                 Round = backendData.Round, 
                 Player = backendData.Player, 
                 Steps = backendData.Steps, 
-                Scores = backendData.Scores,
-                Operation = new Operation(backendData.Operation)
+                Scores = backendData.Score,
+                Operation = new Operation(backendData.Operation),
+                StopReason = backendData.StopReason
             };
             var stateChanges = new List<StateChange>();
             var manyTimesBlockChanges = backendData.ManyTimesNewBlocks.Zip(
@@ -160,5 +166,77 @@ namespace DataManager
         {
             Datas.Add(data);
         }
+    }
+    
+    // 以下的命名都不符合C#命名规范
+    // 目的是要与通信所需json的key相匹配以保证能正确解析
+    public class Info
+    {
+        public string request { get; set; }
+        public string token { get; set; }
+        public string content { get; set; }
+    }
+
+    public class HistoryInfo
+    {
+        public string request { get; set; }
+        public List<string> content { get; set; }
+    }
+
+    public class WatchInfo
+    {
+        public string request { get; set; }
+    }
+
+    public class JudgerData
+    {
+        public string request { get; set; }
+        public string content { get; set; }
+    }
+
+    // 网页发送过来的信息
+    [Serializable]
+    public class FrontendData
+    {
+        public enum MsgType
+        {
+            init_player_player,
+            init_replay_player,
+            load_frame,
+            load_next_frame,
+            load_players,
+            play_speed,
+        }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MsgType message { get; set; }
+        public string payload { get; set; }
+        public string token { get; set; }
+        public int speed { get; set; }
+        public List<BackendData> replay_data { get; set; }
+        public int index { get; set; }
+        public List<string> players { get; set; }
+    }
+
+    // 回复网页的信息
+    [Serializable]
+    public class FrontendReplyData
+    {
+        public enum MsgType
+        {
+            init_successfully,
+            initialize_result,
+            game_record,    
+            error_marker,
+            loaded // 表示当前unity已经初始化完成，可以开始接收评测机的信息
+        }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MsgType message { get; set; }
+        public int number_of_frames { get; set; }
+        public int height { get; set; }
+        public bool init_result { get; set; }
+        public string game_record { get; set; }
+        public string err_msg { get; set; }
     }
 }
