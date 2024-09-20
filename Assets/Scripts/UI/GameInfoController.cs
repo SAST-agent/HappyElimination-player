@@ -15,13 +15,13 @@ public class GameInfoController : MonoBehaviour
     {
         if (ModeController.IsInteractMode())
         {
-            gameRound.text = "当前回合: " + 100.ToString();
+            gameRound.text = "当前回合: " + 1.ToString();
             playerScore.text = "你的分数: " + 0.ToString();
             opponentScore.text = "对手分数: " + 0.ToString();
         }
         else
         {
-            gameRound.text = "当前回合: " + 100.ToString();
+            gameRound.text = "当前回合: " + 1.ToString();
             playerScore.text = "0号玩家分数: " + 0.ToString();
             opponentScore.text = "1号玩家分数: " + 0.ToString();
         }
@@ -54,9 +54,13 @@ public class GameInfoController : MonoBehaviour
         }
     }
 
-    public void UpdateGameInfo()
+    public void UpdateRound()
     {
         round = StateController.getRound();
+    }
+    
+    public void UpdateScore()
+    {
         player = StateController.getScores()[StateController.getPlayer()];
         opponent = StateController.getScores()[1 - StateController.getPlayer()];
     }

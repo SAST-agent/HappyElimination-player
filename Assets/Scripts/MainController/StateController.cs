@@ -13,11 +13,12 @@ public class StateController : MonoBehaviour
     private static GameState _gameState = new GameState();
     
     private static bool _playing = false;
+
+    private static int _curRoundPlayedNum = 0;
     
     public static void StateInitialize(JsonData initialData)
     {
-        _gameState.Round = initialData.Round;
-        _gameState.Player = initialData.Player;
+        _gameState.Round = initialData.Round + 1;
         _gameState.Steps = initialData.Steps;
         _gameState.Scores = initialData.Scores;
         _gameState.Map.ClearBlocks();
@@ -41,8 +42,7 @@ public class StateController : MonoBehaviour
 
     public static void UpdateInformation(JsonData roundToPlay)
     {
-        _gameState.Round = roundToPlay.Round;
-        _gameState.Player = roundToPlay.Player;
+        _gameState.Round = roundToPlay.Round + 1;
         _gameState.Steps = roundToPlay.Steps;
         _gameState.Scores = roundToPlay.Scores;
     }
@@ -60,11 +60,6 @@ public class StateController : MonoBehaviour
     public static void setPlayer(int player)
     {
         _gameState.Player = player;
-    }
-
-    public static int getSteps()
-    {
-        return _gameState.Steps;
     }
 
     public static List<int> getScores()
@@ -92,4 +87,18 @@ public class StateController : MonoBehaviour
         return _playing;
     }
 
+    public static int getPlayedNum()
+    {
+        return _curRoundPlayedNum;
+    }
+
+    public static void onePlay()
+    {
+        _curRoundPlayedNum += 1;
+    }
+
+    public static void resetRoundPlayedNum()
+    {
+        _curRoundPlayedNum = 0;
+    }
 }

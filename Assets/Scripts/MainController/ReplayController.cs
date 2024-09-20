@@ -67,7 +67,8 @@ public class ReplayController : MonoBehaviour
                 GetComponent<UIController>().GameStop(data.StopReason);
             }
         }
-        GetComponent<UIController>().UpdateGameInfo();
+        GetComponent<UIController>().UpdateRound();
+        GetComponent<UIController>().UpdateScore();
         GetComponent<MapController>().ReGenerateMap();
         nowRound = index;
     }
@@ -100,7 +101,13 @@ public class ReplayController : MonoBehaviour
         if (nowEliminateStep >= roundToPlay.StateChanges.Count)
         {
             CancelInvoke();
-            GetComponent<UIController>().UpdateGameInfo();
+            GetComponent<UIController>().UpdateScore();
+            StateController.onePlay();
+            if (StateController.getPlayedNum() == 2)
+            {
+                GetComponent<UIController>().UpdateRound();
+                StateController.resetRoundPlayedNum();
+            }
             if (roundToPlay.StopReason != null)
             {
                 GetComponent<UIController>().GameStop(roundToPlay.StopReason);

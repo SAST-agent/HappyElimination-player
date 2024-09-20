@@ -110,7 +110,6 @@ public class WebInteractionController : MonoBehaviour
     {
         try
         {
-            Debug.Log($"Received message from websocket: {information}");
             var judgerData = JsonConvert.DeserializeObject<JudgerData>(information);
             if (judgerData.request == "action")
             {
