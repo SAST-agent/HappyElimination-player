@@ -18,9 +18,9 @@ public class UIController: MonoBehaviour
         gameInfo.GetComponent<GameInfoController>().UpdateScore();
     }
 
-    public void GameStop(string reason)
+    public void GameStop(int winner, string reason)
     {
-        stopReason.GetComponent<StopController>().ShowStopReason(reason);
+        stopReason.GetComponent<StopController>().ShowStopReason(winner, reason);
     }
     
     public void GameRestart(){

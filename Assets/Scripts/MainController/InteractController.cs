@@ -76,7 +76,7 @@ public class InteractController: MonoBehaviour
             }
             if (_curStopReason != null)
             {
-                GetComponent<UIController>().GameStop(_curStopReason);
+                GetComponent<UIController>().GameStop(_curPlayer ,_curStopReason);
                 // TODO 结束后禁用交互
             }
             StateController.EndPlaying();

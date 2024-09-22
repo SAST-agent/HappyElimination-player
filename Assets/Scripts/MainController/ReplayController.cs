@@ -65,7 +65,7 @@ public class ReplayController : MonoBehaviour
             StateController.MapStateUpdate(data.StateChanges);
             if (data.StopReason != null)
             {
-                GetComponent<UIController>().GameStop(data.StopReason);
+                GetComponent<UIController>().GameStop(data.Player, data.StopReason);
             }
         }
         GetComponent<UIController>().UpdateRound();
@@ -109,9 +109,9 @@ public class ReplayController : MonoBehaviour
                 GetComponent<UIController>().UpdateRound();
                 StateController.resetRoundPlayedNum();
             }
-            if (roundToPlay.StopReason != null)
+            if (roundToPlay.StopReason != null )
             {
-                GetComponent<UIController>().GameStop(roundToPlay.StopReason);
+                GetComponent<UIController>().GameStop(roundToPlay.Player, roundToPlay.StopReason);
             }
             StateController.EndPlaying();
             return;
