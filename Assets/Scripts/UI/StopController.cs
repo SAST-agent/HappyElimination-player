@@ -19,4 +19,8 @@ public class StopController : MonoBehaviour
             stopText.text = stopReason;
         }
     }
+    
+    public void HideStopReason(){
+        gameObject.SetActive(false);    
+    }
 }

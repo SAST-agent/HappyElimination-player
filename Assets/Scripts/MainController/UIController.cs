@@ -22,4 +22,8 @@ public class UIController: MonoBehaviour
     {
         stopReason.GetComponent<StopController>().ShowStopReason(reason);
     }
+    
+    public void GameRestart(){
+        stopReason.GetComponent<StopController>().HideStopReason();  
+    }
 }

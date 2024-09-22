@@ -55,6 +55,7 @@ public class ReplayController : MonoBehaviour
         }
         var initialData = GetInitialData();
         StateController.StateInitialize(initialData);
+        GetComponent<UIController>().GameRestart();
         // update map
         for (int i = 1; i < index; i++)
         {
