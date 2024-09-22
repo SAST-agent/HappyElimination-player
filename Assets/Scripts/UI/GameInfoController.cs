@@ -61,7 +61,17 @@ public class GameInfoController : MonoBehaviour
     
     public void UpdateScore()
     {
-        player = StateController.getScores()[StateController.getPlayer()];
-        opponent = StateController.getScores()[1 - StateController.getPlayer()];
+        if (ModeController.IsInteractMode())
+        {
+            player = StateController.getScores()[StateController.getPlayer()];
+            opponent = StateController.getScores()[1 - StateController.getPlayer()];
+        }
+        else if (ModeController.IsReplayMode())
+        {
+            // 回放模式不会连后端，因此StateController里不会存player
+            // 而且在回放模式下“当前玩家”没有意义，不应当去访问这个 ↑ 变量
+            player = StateController.getScores()[0];
+            opponent = StateController.getScores()[1];
+        }
     }
 }

@@ -260,8 +260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a37f3715c4845b1bf1a71d9fa840f06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finishScreen: {fileID: 789091239}
-  winText: {fileID: 2021632886}
   operateText: {fileID: 413609849}
 --- !u!114 &169101998
 MonoBehaviour:
@@ -655,14 +653,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d799bc594753d49a296012bef2a5aae1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1a198d44d09d5c44b8086da0b49dba65, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

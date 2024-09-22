@@ -31,7 +31,7 @@ public class InteractController: MonoBehaviour
         {
             StateController.StateInitialize(data);
             GetComponent<MapController>().MapInitialize(data);
-            operateText.text = "你的回合";
+            operateText.text = StateController.getPlayer() == 0 ? "你的回合" : "对方回合";
         }
         else
         {

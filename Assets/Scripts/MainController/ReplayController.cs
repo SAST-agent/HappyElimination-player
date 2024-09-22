@@ -96,7 +96,7 @@ public class ReplayController : MonoBehaviour
 
     void UpdateMapStep()
     {
-        Debug.Log($"Eliminate step {nowEliminateStep}");
+        // Debug.Log($"Eliminate step {nowEliminateStep}");
         var roundToPlay = BackendData.Convert(_replay.Datas[nowRound - 1]);
         if (nowEliminateStep >= roundToPlay.StateChanges.Count)
         {
@@ -115,6 +115,7 @@ public class ReplayController : MonoBehaviour
             StateController.EndPlaying();
             return;
         }
+        Debug.Log($"Eliminate step {nowEliminateStep}");
         StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
         GetComponent<MapController>().UpdateMap(roundToPlay.StateChanges[nowEliminateStep], animationSpeed);
         nowEliminateStep += 1;
