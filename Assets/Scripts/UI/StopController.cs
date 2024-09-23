@@ -21,10 +21,12 @@ public class StopController : MonoBehaviour
         {
             winnerText.text = "胜者：" + winner.ToString();
         }
-
         if (stopText != null)
         {
-            stopText.text = stopReason;
+            if (stopReason.Contains("Invalid Operation 100 100 100 100"))
+                stopText.text = "结束原因" + (1 - winner).ToString() + "号玩家认输";
+            else
+                stopText.text = "结束原因" + stopReason;
         }
     }
     

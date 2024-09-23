@@ -49,11 +49,13 @@ public class InteractController: MonoBehaviour
     private void _HandleChange(JsonData data)
     {
         Debug.Log("HandleChange");
-        Debug.Log($"{data.Player}, {StateController.getPlayer()}");
         StateController.BeginPlaying();
-        StateController.UpdateInformation(data);
-        StateController.DoOperation(data.Operation);
-        GetComponent<MapController>().DoOperationOnMap(data.Operation);
+        if (data.StopReason == null)
+        {
+            StateController.UpdateInformation(data);
+            StateController.DoOperation(data.Operation);
+            GetComponent<MapController>().DoOperationOnMap(data.Operation);
+        }
         _curStopReason = data.StopReason;
         _curPlayer = data.Player;
         _stateChanges = data.StateChanges;
