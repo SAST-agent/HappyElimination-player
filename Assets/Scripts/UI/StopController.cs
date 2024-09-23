@@ -24,9 +24,9 @@ public class StopController : MonoBehaviour
         if (stopText != null)
         {
             if (stopReason.Contains("Invalid Operation 100 100 100 100"))
-                stopText.text = "结束原因" + (1 - winner).ToString() + "号玩家认输";
+                stopText.text = "结束原因：" + (1 - winner).ToString() + "号玩家认输";
             else
-                stopText.text = "结束原因" + stopReason;
+                stopText.text = "结束原因：" + stopReason;
         }
     }
     
