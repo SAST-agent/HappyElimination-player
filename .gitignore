@@ -26,6 +26,9 @@
 # Visual Studio cache directory
 .vs/
 
+# JetBrains cache directory
+.idea/
+
 # Gradle cache directory
 .gradle/
 
@@ -77,3 +80,4 @@ crashlytics-build.properties
 .vscode/
 .fake
 /[Aa]ssets/Data/
+json/
