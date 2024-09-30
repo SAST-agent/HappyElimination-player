@@ -7,14 +7,23 @@ public class UIController: MonoBehaviour
 {
     public GameObject gameInfo;
     public GameObject stopReason;
-    
-    public void UpdateGameInfo()
+
+    public void UpdateRound()
     {
-        gameInfo.GetComponent<GameInfoController>().UpdateGameInfo();
+        gameInfo.GetComponent<GameInfoController>().UpdateRound();
+    }
+    
+    public void UpdateScore()
+    {
+        gameInfo.GetComponent<GameInfoController>().UpdateScore();
     }
 
-    public void GameStop(string reason)
+    public void GameStop(int winner, string reason)
     {
-        stopReason.GetComponent<StopController>().ShowStopReason(reason);
+        stopReason.GetComponent<StopController>().ShowStopReason(winner, reason);
+    }
+    
+    public void GameRestart(){
+        stopReason.GetComponent<StopController>().HideStopReason();  
     }
 }

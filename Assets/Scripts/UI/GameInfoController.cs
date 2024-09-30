@@ -15,13 +15,13 @@ public class GameInfoController : MonoBehaviour
     {
         if (ModeController.IsInteractMode())
         {
-            gameRound.text = "当前回合: " + 100.ToString();
+            gameRound.text = "当前回合: " + 1.ToString();
             playerScore.text = "你的分数: " + 0.ToString();
             opponentScore.text = "对手分数: " + 0.ToString();
         }
         else
         {
-            gameRound.text = "当前回合: " + 100.ToString();
+            gameRound.text = "当前回合: " + 1.ToString();
             playerScore.text = "0号玩家分数: " + 0.ToString();
             opponentScore.text = "1号玩家分数: " + 0.ToString();
         }
@@ -54,10 +54,24 @@ public class GameInfoController : MonoBehaviour
         }
     }
 
-    public void UpdateGameInfo()
+    public void UpdateRound()
     {
         round = StateController.getRound();
-        player = StateController.getScores()[StateController.getPlayer()];
-        opponent = StateController.getScores()[1 - StateController.getPlayer()];
+    }
+    
+    public void UpdateScore()
+    {
+        if (ModeController.IsInteractMode())
+        {
+            player = StateController.getScores()[StateController.getPlayer()];
+            opponent = StateController.getScores()[1 - StateController.getPlayer()];
+        }
+        else if (ModeController.IsReplayMode())
+        {
+            // 回放模式不会连后端，因此StateController里不会存player
+            // 而且在回放模式下“当前玩家”没有意义，不应当去访问这个 ↑ 变量
+            player = StateController.getScores()[0];
+            opponent = StateController.getScores()[1];
+        }
     }
 }

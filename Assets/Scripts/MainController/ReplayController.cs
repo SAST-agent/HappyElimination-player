@@ -55,6 +55,7 @@ public class ReplayController : MonoBehaviour
         }
         var initialData = GetInitialData();
         StateController.StateInitialize(initialData);
+        GetComponent<UIController>().GameRestart();
         // update map
         for (int i = 1; i < index; i++)
         {
@@ -64,10 +65,11 @@ public class ReplayController : MonoBehaviour
             StateController.MapStateUpdate(data.StateChanges);
             if (data.StopReason != null)
             {
-                GetComponent<UIController>().GameStop(data.StopReason);
+                GetComponent<UIController>().GameStop(data.Player, data.StopReason);
             }
         }
-        GetComponent<UIController>().UpdateGameInfo();
+        GetComponent<UIController>().UpdateRound();
+        GetComponent<UIController>().UpdateScore();
         GetComponent<MapController>().ReGenerateMap();
         nowRound = index;
     }
@@ -95,19 +97,26 @@ public class ReplayController : MonoBehaviour
 
     void UpdateMapStep()
     {
-        Debug.Log($"Eliminate step {nowEliminateStep}");
+        // Debug.Log($"Eliminate step {nowEliminateStep}");
         var roundToPlay = BackendData.Convert(_replay.Datas[nowRound - 1]);
         if (nowEliminateStep >= roundToPlay.StateChanges.Count)
         {
             CancelInvoke();
-            GetComponent<UIController>().UpdateGameInfo();
-            if (roundToPlay.StopReason != null)
+            GetComponent<UIController>().UpdateScore();
+            StateController.onePlay();
+            if (StateController.getPlayedNum() == 2)
             {
-                GetComponent<UIController>().GameStop(roundToPlay.StopReason);
+                GetComponent<UIController>().UpdateRound();
+                StateController.resetRoundPlayedNum();
+            }
+            if (roundToPlay.StopReason != null )
+            {
+                GetComponent<UIController>().GameStop(roundToPlay.Player, roundToPlay.StopReason);
             }
             StateController.EndPlaying();
             return;
         }
+        Debug.Log($"Eliminate step {nowEliminateStep}");
         StateController.MapStateUpdateStep(roundToPlay.StateChanges[nowEliminateStep]);
         GetComponent<MapController>().UpdateMap(roundToPlay.StateChanges[nowEliminateStep], animationSpeed);
         nowEliminateStep += 1;

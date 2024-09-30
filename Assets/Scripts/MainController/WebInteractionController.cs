@@ -110,7 +110,6 @@ public class WebInteractionController : MonoBehaviour
     {
         try
         {
-            Debug.Log($"Received message from websocket: {information}");
             var judgerData = JsonConvert.DeserializeObject<JudgerData>(information);
             if (judgerData.request == "action")
             {
@@ -150,8 +149,8 @@ public class WebInteractionController : MonoBehaviour
             switch (msg.message)
             {
                 case FrontendData.MsgType.init_player_player:
-                    GetComponent<PlatformFuncController>().SwitchToInteractionMode();
                     ConnectToJudger(msg.token);
+                    GetComponent<PlatformFuncController>().SwitchToInteractionMode();
                     break;
                 case FrontendData.MsgType.init_replay_player:
                     // 这里信息会由html文件一行一行传过来，不需要手动提供文件
