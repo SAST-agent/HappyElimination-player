@@ -11,12 +11,13 @@ public class FunctionManager: MonoBehaviour
 {
     public delegate void LoadNextFrameDelegate();
     public delegate void HandleChangeDelegate(JsonData data);
-    
-    private static Queue<Tuple<Delegate, JsonData?>> _functionQueue;
+
+    [SerializeField]
+    private static Queue<Tuple<Delegate, JsonData?>> _functionQueue = new Queue<Tuple<Delegate, JsonData?>>();
 
     private void Start()
     {
-        _functionQueue = new Queue<Tuple<Delegate, JsonData?>>();
+        // _functionQueue = new Queue<Tuple<Delegate, JsonData?>>(); // 不需要重新初始化
     }
 
     private void Update()
