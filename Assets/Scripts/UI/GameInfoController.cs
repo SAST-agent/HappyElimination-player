@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,9 @@ public class GameInfoController : MonoBehaviour
     public Text gameRound;
     public Text playerScore;
     public Text opponentScore;
-    private int round, player, opponent;
+
+    public Text skillRound;
+    private int round, player, opponent, skillround;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,12 +21,14 @@ public class GameInfoController : MonoBehaviour
             gameRound.text = "当前回合: " + 1.ToString();
             playerScore.text = "你的分数: " + 0.ToString();
             opponentScore.text = "对手分数: " + 0.ToString();
+            skillRound.text = "技能持续时间: " + 0.ToString();
         }
         else
         {
             gameRound.text = "当前回合: " + 1.ToString();
             playerScore.text = "0号玩家分数: " + 0.ToString();
             opponentScore.text = "1号玩家分数: " + 0.ToString();
+            skillRound.text = "技能持续时间: " + 0.ToString();
         }
     }
 
@@ -35,22 +40,25 @@ public class GameInfoController : MonoBehaviour
             gameRound.text = "当前回合: " + (round + 1).ToString();
             playerScore.text = "你的分数: " + player.ToString();
             opponentScore.text = "对手分数: " + opponent.ToString();
+            skillRound.text = "技能持续时间: " + StateController.getSkill().ToString();
         }
         else
         {
             gameRound.text = "当前回合: " + (round + 1).ToString();
             playerScore.text = "0号玩家分数: " + player.ToString();
             opponentScore.text = "1号玩家分数: " + opponent.ToString();
+            skillRound.text = "技能持续时间: " + StateController.getSkill().ToString();
         }
     }
 
-    public void SetGameInfo(int _round, int _player, int _opponent)
+    public void SetGameInfo(int _round, int _player, int _opponent, int _skillround)
     {
         if (_round >= 0)
         {
             round = _round;
             player = _player;
             opponent = _opponent;
+            skillround = _skillround;
         }
     }
 
@@ -58,7 +66,7 @@ public class GameInfoController : MonoBehaviour
     {
         round = StateController.getRound();
     }
-    
+
     public void UpdateScore()
     {
         if (ModeController.IsInteractMode())
@@ -73,5 +81,10 @@ public class GameInfoController : MonoBehaviour
             player = StateController.getScores()[0];
             opponent = StateController.getScores()[1];
         }
+    }
+
+    public void UpdateSkillRound()
+    {
+        skillround = StateController.getSkillLastRound();
     }
 }

@@ -21,6 +21,8 @@ public class StateController : MonoBehaviour
         _gameState.Round = initialData.Round + 1;
         _gameState.Steps = initialData.Steps;
         _gameState.Scores = initialData.Scores;
+        _gameState.Skill = initialData.Skill;
+        _gameState.SkillLastRound = initialData.SkillLastRound;
         _gameState.Map.ClearBlocks();
         _gameState.Map.UpdateMap(initialData.StateChanges);
     }
@@ -45,6 +47,8 @@ public class StateController : MonoBehaviour
         _gameState.Round = roundToPlay.Round + 1;
         _gameState.Steps = roundToPlay.Steps;
         _gameState.Scores = roundToPlay.Scores;
+        _gameState.Skill = roundToPlay.Skill;
+        _gameState.SkillLastRound = roundToPlay.SkillLastRound;
     }
 
     public static int getRound()
@@ -65,6 +69,16 @@ public class StateController : MonoBehaviour
     public static List<int> getScores()
     {
         return _gameState.Scores;
+    }
+
+    public static int getSkill()
+    {
+        return _gameState.Skill;
+    }
+
+    public static int getSkillLastRound()
+    {
+        return _gameState.SkillLastRound;
     }
     
     public static Map GetMap()

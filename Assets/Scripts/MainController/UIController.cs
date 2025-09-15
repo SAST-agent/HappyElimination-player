@@ -18,6 +18,11 @@ public class UIController: MonoBehaviour
         gameInfo.GetComponent<GameInfoController>().UpdateScore();
     }
 
+    public void UpdateSkillRound()
+    {
+        gameInfo.GetComponent<GameInfoController>().UpdateSkillRound();
+    }
+
     public void GameStop(int winner, string reason)
     {
         stopReason.GetComponent<StopController>().ShowStopReason(winner, reason);

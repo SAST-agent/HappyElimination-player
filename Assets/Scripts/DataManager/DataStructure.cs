@@ -198,7 +198,9 @@ namespace DataManager
     {
         public int Round { get; set; }
         public int Player { get; set; }
-        public int Steps { get; set; }
+        public int Steps { get; set; }  
+        public int Skill { get; set; }
+        public int SkillLastRound { get; set; }
         public List<int> Scores { get; set; }
         public Map Map { get; set; }
 
@@ -207,6 +209,8 @@ namespace DataManager
             Round = -1;
             Player = -1;
             Steps = -1;
+            Skill = 0;
+            SkillLastRound = 0;
             Scores = new List<int>(2);
             Map = new Map();
         }
