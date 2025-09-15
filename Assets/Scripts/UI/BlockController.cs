@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class BlockController : MonoBehaviour
 {
-    public Button blockBgitutton;
+    public Button blockButton;
     public LineRenderer lineRenderer;
     public SpriteRenderer spriteRenderer;
     public float bias;
