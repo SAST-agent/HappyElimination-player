@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 211110878}
   - component: {fileID: 211110877}
   m_Layer: 5
-  m_Name: OpponentScore
+  m_Name: SkillRound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1026,6 +1026,7 @@ MonoBehaviour:
   gameRound: {fileID: 1188263072}
   playerScore: {fileID: 1294274599}
   opponentScore: {fileID: 2090461597}
+  skillRound: {fileID: 211110877}
 --- !u!114 &725737144
 MonoBehaviour:
   m_ObjectHideFlags: 0

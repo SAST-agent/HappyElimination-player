@@ -98,7 +98,6 @@ public class ClickController : MonoBehaviour
                 return true;
             }
         }
-        return false;
     }
 
     public void ConfirmClick()
