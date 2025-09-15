@@ -78,7 +78,7 @@ public class ClickController : MonoBehaviour
     //点击技能按钮事件
     public bool ClickSkill(int Type)
     {
-        if (ModeController.IsInteractMode() && !StateController.IsPlaying())
+        if (true)
         {
             if (skill == Type)
             {

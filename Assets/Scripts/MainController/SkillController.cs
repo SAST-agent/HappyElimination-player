@@ -8,11 +8,16 @@ using UnityEngine.UI;
 public class SkillController : MonoBehaviour
 {
     public int Type;
-    public LineRenderer lineRenderer;
+    public Outline lineRenderer;
 
     void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer = GetComponent<Outline>();
+        if (lineRenderer == null)
+        {
+            // 如果没有 Outline 组件，就添加一个
+            lineRenderer = gameObject.AddComponent<Outline>();
+        }
         lineRenderer.enabled = false;
     }
 
@@ -33,5 +38,6 @@ public class SkillController : MonoBehaviour
     public void AnotherSkillActivated()
     {
         lineRenderer.enabled = false;
+        Debug.Log("Skill " + Type + " deactivated by another skill");
     }
 }
