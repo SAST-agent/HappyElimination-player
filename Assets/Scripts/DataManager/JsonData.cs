@@ -13,6 +13,14 @@ namespace DataManager
      * 回放文件的Json格式等等
      */
 
+
+    //只需要发给后端的操作
+    public class MyAction
+    {
+        public string action { get; set; }
+        public int skill { get; set; }
+    }
+
     public class Operation
     {
         // 玩家操作类型

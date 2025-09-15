@@ -90,10 +90,15 @@ public class WebInteractionController : MonoBehaviour
 
     // 向后端发送 action
     // 游戏UI逻辑需要使用
-    public void SendAction(Operation action)
+    public void SendAction(Operation action, int skill = 0)
     {
-        string sendAction = action.ToString();
-        sendAction += '\n';
+        MyAction sendaction = new MyAction
+        {
+            action = action.ToString(),
+            skill = skill
+        };
+        sendaction.action += '\n';
+        var sendAction = JsonConvert.SerializeObject(sendaction);
         var sendMessage = new Info{
             request = "action",
             token = tokenB64,

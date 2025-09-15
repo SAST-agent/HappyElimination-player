@@ -11,6 +11,9 @@ public class ClickController : MonoBehaviour
     private int _firstX = -1, _firstY = -1;
     private int _secondX = -1, _secondY = -1;
 
+    private int skill = 0;
+    private int last_skill = 0;
+
     void Update()
     {
         // 监听主键盘的 Enter 键
@@ -72,13 +75,38 @@ public class ClickController : MonoBehaviour
         }
         return false;
     }
+    //点击技能按钮事件
+    public bool ClickSkill(int Type)
+    {
+        if (ModeController.IsInteractMode() && !StateController.IsPlaying())
+        {
+            if (skill == Type)
+            {
+                skill = 0;
+                return false;
+            }
+            else if (skill == 0)
+            {
+                skill = Type;
+                return true;
+            }
+            else
+            {
+                last_skill = skill;
+                skill = Type;
+                GameObject.Find("Skill " + last_skill).GetComponent<SkillController>().AnotherSkillActivated();
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void ConfirmClick()
     {
         if (_chooseOne && _chooseTwo && !StateController.IsPlaying())
         {
             //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { _firstX, _firstY }, new List<int>() { _secondX, _secondY } }));
+            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { _firstX, _firstY }, new List<int>() { _secondX, _secondY } }),skill);
             GameObject block1 = GetComponentInParent<GameObjectController>().ObjectList[_firstX][_firstY], block2 = GetComponentInParent<GameObjectController>().ObjectList[_secondX][_secondY];
             block1.GetComponent<BlockController>().lineRenderer.enabled = false;
             block1.GetComponent<BlockController>().spriteRenderer.color = new Color(1, 1, 1, 1);
@@ -98,7 +126,7 @@ public class ClickController : MonoBehaviour
         if (ModeController.IsInteractMode() && !StateController.IsPlaying())
         {
             //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { 100, 100 }, new List<int>() { 100, 100 } }));
+            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { 100, 100 }, new List<int>() { 100, 100 } }), skill);
             if (_chooseOne)
             {
                 GameObject block1 = GetComponentInParent<GameObjectController>().ObjectList[_firstX][_firstY];
@@ -120,15 +148,6 @@ public class ClickController : MonoBehaviour
         }
     }
 
-    public void SkillClick1()
-    {
-        if(ModeController.IsInteractMode() && !StateController.IsPlaying())
-        {
-            //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { 101, 101 }, new List<int>() { 101, 101 } }));
-        }
-    }
-
     public void OnEnterKeyPressed()
     {
         if (ModeController.IsInteractMode() && !StateController.IsPlaying())
@@ -141,7 +160,7 @@ public class ClickController : MonoBehaviour
                 y2 = Random.Range(0, 20);
             }
             //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { x1, y1 }, new List<int>() { x2, y2 } }));
+            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { x1, y1 }, new List<int>() { x2, y2 } }),skill);
             if (_chooseOne)
             {
                 GameObject block1 = GetComponentInParent<GameObjectController>().ObjectList[_firstX][_firstY];
