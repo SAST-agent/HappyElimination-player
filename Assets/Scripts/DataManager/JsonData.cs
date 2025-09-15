@@ -6,13 +6,13 @@ using Newtonsoft.Json.Converters;
 using Unity.VisualScripting;
 
 namespace DataManager
-{   
+{
     /*
      * 这里存储一些需要序列化与反序列化的数据结构
      * 例如前后端通信使用的Json格式
      * 回放文件的Json格式等等
      */
-    
+
     public class Operation
     {
         // 玩家操作类型
@@ -44,7 +44,7 @@ namespace DataManager
         // 每次操作之后的状态改变
         public List<Block> NewBlocks { get; set; }
         public List<Block> EliminateBlocks { get; set; }
-
+        
         public StateChange()
         {
             NewBlocks = new List<Block>();
@@ -86,6 +86,8 @@ namespace DataManager
         public int Steps { get; set; }
         public List<int> Scores { get; set; }
         public Operation Operation { get; set; }
+        public int Skill { get; set; }
+        public int SkillLastRound { get; set; }
         public List<StateChange> StateChanges { get; set; }
         public string StopReason { get; set; }
 
@@ -96,6 +98,8 @@ namespace DataManager
             Steps = -1;
             Scores = null;
             Operation = null;
+            Skill = -1;
+            SkillLastRound = -1;
             StateChanges = null;
             StopReason = null;
         }
@@ -110,6 +114,8 @@ namespace DataManager
         public int Steps { get; set; }
         public List<int> Score { get; set; }
         public List<List<int>> Operation { get; set; }
+        public int Skill { get; set; }
+        public int SkillLastRound { get; set; }
         public List<List<List<int>>> ManyTimesNewBlocks { get; set; }
         public List<List<List<int>>> ManyTimesEliminateBlocks { get; set; }
         public string StopReason { get; set; }
@@ -121,6 +127,8 @@ namespace DataManager
             Steps = -1;
             Score = null;
             Operation = null;
+            Skill = -1;
+            SkillLastRound = -1;
             ManyTimesNewBlocks = null;
             ManyTimesEliminateBlocks = null;
             StopReason = null;
@@ -140,6 +148,8 @@ namespace DataManager
                 Steps = backendData.Steps, 
                 Scores = backendData.Score,
                 Operation = new Operation(backendData.Operation),
+                Skill = backendData.Skill,
+                SkillLastRound = backendData.SkillLastRound,
                 StopReason = backendData.StopReason
             };
             var stateChanges = new List<StateChange>();

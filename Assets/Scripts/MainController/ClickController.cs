@@ -78,7 +78,7 @@ public class ClickController : MonoBehaviour
         if (_chooseOne && _chooseTwo && !StateController.IsPlaying())
         {
             //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction( new Operation( new List<List<int>>(){ new List<int>(){_firstX, _firstY}, new List<int>(){_secondX, _secondY} }) );
+            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { _firstX, _firstY }, new List<int>() { _secondX, _secondY } }));
             GameObject block1 = GetComponentInParent<GameObjectController>().ObjectList[_firstX][_firstY], block2 = GetComponentInParent<GameObjectController>().ObjectList[_secondX][_secondY];
             block1.GetComponent<BlockController>().lineRenderer.enabled = false;
             block1.GetComponent<BlockController>().spriteRenderer.color = new Color(1, 1, 1, 1);
@@ -95,10 +95,10 @@ public class ClickController : MonoBehaviour
     
     public void DefeatClick()
     {
-        if( ModeController.IsInteractMode() && !StateController.IsPlaying() )
+        if (ModeController.IsInteractMode() && !StateController.IsPlaying())
         {
             //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction( new Operation( new List<List<int>>(){ new List<int>(){100, 100}, new List<int>(){100, 100} }) );
+            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { 100, 100 }, new List<int>() { 100, 100 } }));
             if (_chooseOne)
             {
                 GameObject block1 = GetComponentInParent<GameObjectController>().ObjectList[_firstX][_firstY];
@@ -120,9 +120,18 @@ public class ClickController : MonoBehaviour
         }
     }
 
+    public void SkillClick1()
+    {
+        if(ModeController.IsInteractMode() && !StateController.IsPlaying())
+        {
+            //发送操作
+            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { 101, 101 }, new List<int>() { 101, 101 } }));
+        }
+    }
+
     public void OnEnterKeyPressed()
     {
-        if ( ModeController.IsInteractMode() && !StateController.IsPlaying())
+        if (ModeController.IsInteractMode() && !StateController.IsPlaying())
         {
             int x1 = Random.Range(0, 20), y1 = Random.Range(0, 20);
             int x2 = Random.Range(0, 20), y2 = Random.Range(0, 20);
@@ -132,7 +141,7 @@ public class ClickController : MonoBehaviour
                 y2 = Random.Range(0, 20);
             }
             //发送操作
-            GetComponentInParent<WebInteractionController>().SendAction( new Operation( new List<List<int>>(){ new List<int>(){x1, y1}, new List<int>(){x2, y2} }) );
+            GetComponentInParent<WebInteractionController>().SendAction(new Operation(new List<List<int>>() { new List<int>() { x1, y1 }, new List<int>() { x2, y2 } }));
             if (_chooseOne)
             {
                 GameObject block1 = GetComponentInParent<GameObjectController>().ObjectList[_firstX][_firstY];

@@ -81,3 +81,6 @@ crashlytics-build.properties
 .fake
 /[Aa]ssets/Data/
 json/
+
+.DS_Store/
+.WebGL/
