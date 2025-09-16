@@ -78,7 +78,7 @@ public class ClickController : MonoBehaviour
     //点击技能按钮事件
     public bool ClickSkill(int Type)
     {
-        if (true)
+        if (ModeController.IsInteractMode() && !StateController.IsPlaying())
         {
             if (skill == Type)
             {
@@ -98,6 +98,7 @@ public class ClickController : MonoBehaviour
                 return true;
             }
         }
+        return false;
     }
 
     public void ConfirmClick()

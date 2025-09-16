@@ -11,6 +11,8 @@ public class SkillController : MonoBehaviour
     public int Type;
     public Outline lineRenderer;
     private int player;
+    // 确认当前技能是否有边框
+    private bool isActive = false;
 
     void Start()
     {
@@ -26,7 +28,7 @@ public class SkillController : MonoBehaviour
 
     void Update()
     {
-        if(ModeController.IsReplayMode())
+        if(ModeController.IsReplayMode() && isActive)
         {
             if(StateController.getSkill()[player] == Type)
             {
@@ -41,22 +43,27 @@ public class SkillController : MonoBehaviour
 
     public void OnButtonDown()
     {
+        if(!ModeController.IsInteractMode() || StateController.IsPlaying())
+            return;
         if (GameObject.Find("Main Controller").GetComponent<ClickController>().ClickSkill(Type)) //正常点的情况
         {
             lineRenderer.enabled = true;
             Debug.Log("Skill " + Type + " activated");
+            isActive = true;
         }
         else //自己点掉自己的情况
         {
-            if (StateController.getSkill()[player] == Type) return;
+            if (StateController.getSkill()[player] == Type) return;  //如果当前技能是激活状态，点掉无效
             lineRenderer.enabled = false;
             Debug.Log("Skill " + Type + " deactivated");
+            isActive = false;
         }
     }
 
     public void AnotherSkillActivated() //被另一个技能点掉的情况
     {
         lineRenderer.enabled = false;
+        isActive = true;
         Debug.Log("Skill " + Type + " deactivated by another skill");
     }
 }
