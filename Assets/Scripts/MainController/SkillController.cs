@@ -10,6 +10,7 @@ public class SkillController : MonoBehaviour
 {
     public int Type;
     public Outline lineRenderer;
+    private int player;
 
     void Start()
     {
@@ -20,13 +21,14 @@ public class SkillController : MonoBehaviour
             lineRenderer = gameObject.AddComponent<Outline>();
         }
         lineRenderer.enabled = false;
+        player = StateController.getPlayer();
     }
 
     void Update()
     {
         if(ModeController.IsReplayMode())
         {
-            if(StateController.getSkill() == Type)
+            if(StateController.getSkill()[player] == Type)
             {
                 lineRenderer.enabled = true;
             }
@@ -46,7 +48,7 @@ public class SkillController : MonoBehaviour
         }
         else //自己点掉自己的情况
         {
-            if (StateController.getSkill() == Type) return;
+            if (StateController.getSkill()[player] == Type) return;
             lineRenderer.enabled = false;
             Debug.Log("Skill " + Type + " deactivated");
         }

@@ -70,6 +70,7 @@ public class ReplayController : MonoBehaviour
         }
         GetComponent<UIController>().UpdateRound();
         GetComponent<UIController>().UpdateScore();
+        GetComponent<UIController>().UpdateSkillRound();
         GetComponent<MapController>().ReGenerateMap();
         nowRound = index;
     }
@@ -103,6 +104,7 @@ public class ReplayController : MonoBehaviour
         {
             CancelInvoke();
             GetComponent<UIController>().UpdateScore();
+            GetComponent<UIController>().UpdateSkillRound();
             StateController.onePlay();
             if (StateController.getPlayedNum() == 2)
             {

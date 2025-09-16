@@ -55,6 +55,7 @@ public class InteractController: MonoBehaviour
             StateController.UpdateInformation(data);
             StateController.DoOperation(data.Operation);
             GetComponent<MapController>().DoOperationOnMap(data.Operation);
+            
         }
         _curStopReason = data.StopReason;
         _curPlayer = data.Player;
@@ -74,6 +75,7 @@ public class InteractController: MonoBehaviour
             if (StateController.getPlayedNum() == 2) // 两位玩家都操作了
             {
                 GetComponent<UIController>().UpdateRound();
+                GetComponent<UIController>().UpdateSkillRound();
                 StateController.resetRoundPlayedNum();
             }
             if (_curStopReason != null)
@@ -86,6 +88,7 @@ public class InteractController: MonoBehaviour
         }
         StateController.MapStateUpdateStep(_stateChanges[_nowEliminateStep]);
         GetComponent<MapController>().UpdateMap(_stateChanges[_nowEliminateStep]);
+
         _nowEliminateStep += 1;
         Invoke(nameof(UpdateMapStep), Constants.TimeBetweenFrames);
     }

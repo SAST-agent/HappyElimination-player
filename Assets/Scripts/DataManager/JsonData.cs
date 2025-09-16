@@ -94,11 +94,11 @@ namespace DataManager
         public int Steps { get; set; }
         public List<int> Scores { get; set; }
         public Operation Operation { get; set; }
-        public int Skill { get; set; }
-        public int SkillLastRound { get; set; }
+        public int[] Skill { get; set; }
+        public int[] SkillLastRound { get; set; }
         public List<StateChange> StateChanges { get; set; }
         public string StopReason { get; set; }
-
+ 
         public JsonData()
         {
             Round = -1;
@@ -106,8 +106,8 @@ namespace DataManager
             Steps = -1;
             Scores = null;
             Operation = null;
-            Skill = -1;
-            SkillLastRound = -1;
+            Skill = new int[2];
+            SkillLastRound = new int[2];
             StateChanges = null;
             StopReason = null;
         }
@@ -122,8 +122,8 @@ namespace DataManager
         public int Steps { get; set; }
         public List<int> Score { get; set; }
         public List<List<int>> Operation { get; set; }
-        public int Skill { get; set; }
-        public int SkillLastRound { get; set; }
+        public int[] Skill { get; set; }
+        public int[] SkillLastRound { get; set; }
         public List<List<List<int>>> ManyTimesNewBlocks { get; set; }
         public List<List<List<int>>> ManyTimesEliminateBlocks { get; set; }
         public string StopReason { get; set; }
@@ -135,8 +135,8 @@ namespace DataManager
             Steps = -1;
             Score = null;
             Operation = null;
-            Skill = -1;
-            SkillLastRound = -1;
+            Skill = new int[2];
+            SkillLastRound = new int[2];
             ManyTimesNewBlocks = null;
             ManyTimesEliminateBlocks = null;
             StopReason = null;

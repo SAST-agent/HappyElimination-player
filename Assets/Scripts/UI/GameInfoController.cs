@@ -85,6 +85,6 @@ public class GameInfoController : MonoBehaviour
 
     public void UpdateSkillRound()
     {
-        skillround = StateController.getSkillLastRound();
+        skillround = StateController.getSkillLastRound()[player];
     }
 }

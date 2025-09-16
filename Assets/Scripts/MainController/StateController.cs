@@ -71,12 +71,12 @@ public class StateController : MonoBehaviour
         return _gameState.Scores;
     }
 
-    public static int getSkill()
+    public static int[] getSkill()
     {
         return _gameState.Skill;
     }
 
-    public static int getSkillLastRound()
+    public static int[] getSkillLastRound()
     {
         return _gameState.SkillLastRound;
     }
